@@ -240,3 +240,30 @@ const playlists = (items) => {
     return item.href;
   });
 };
+
+const addTracks = async (songsToBeAdded, playlist_id, link) => {
+  try {
+    songsToBeAdded.map(async (item) => {
+      try {
+        let response = await axios.post(
+          `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
+          {
+            uris: [item],
+            position: 0,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${link}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        return response;
+      } catch (e) {
+        throw e;
+      }
+    });
+  } catch (e) {
+    throw e;
+  }
+};
