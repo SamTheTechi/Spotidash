@@ -1,5 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
+
 const Login = () => {
+  const handleClick = () => {
+    console.log(`clicked`);
+    // window.location.port = `5000`;
+    window.location.href = `http://localhost:5000/login`;
+  };
+
   return (
     <>
       <main className="bg-black text-white overflow-x-hidden h-screen w-screen  box-border">
@@ -18,7 +25,10 @@ const Login = () => {
             Login to Countinue <br /> to SpotiDash.
           </section>
           <section className=" h-[auto]">
-            <button className="text-black font-semibold bg-[#1ed760] min-w-[15rem] aspect-[5/1] rounded-[30px] pt-[-80px]">
+            <button
+              className="text-black font-semibold bg-[#1ed760] hover:bg-[#169e46] min-w-[15rem] aspect-[5/1] rounded-[30px] pt-[-80px]"
+              onClick={handleClick}
+            >
               Log in
             </button>
           </section>
