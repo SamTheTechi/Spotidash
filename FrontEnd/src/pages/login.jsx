@@ -9,7 +9,7 @@ const Login = () => {
 
   return (
     <>
-      <main className="bg-black text-white overflow-x-hidden h-screen w-screen  box-border">
+      <main className="bg-black text-white overflow-x-hidden h-screen w-screen m-0 p-0  box-border">
         <header className=" flex justify-start items-start h-[20%] w-[100%] p-5 overflow-hidden">
           <img
             src="https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png"
