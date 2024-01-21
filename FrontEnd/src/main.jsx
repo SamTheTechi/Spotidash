@@ -1,9 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
+import TokenContextProvider from "./context/tokenContextProvider";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <TokenContextProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </TokenContextProvider>
   </React.StrictMode>
 );

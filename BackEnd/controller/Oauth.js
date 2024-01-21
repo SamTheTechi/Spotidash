@@ -1,3 +1,4 @@
+require(`dotenv`).config();
 const { StatusCode } = require(`http-status-codes`);
 const axios = require(`axios`);
 const querystring = require("querystring");
@@ -5,6 +6,7 @@ const querystring = require("querystring");
 var client_id = "80201b446e0445c9b94eff48aaa32f5e";
 var client_secret = "cf112194a22b45109b223f600eece71c";
 var redirect_uri = "http://localhost:5000/callback";
+let access_token = ``;
 
 let generateRandomString = (length) => {
   const characters =
@@ -20,7 +22,7 @@ let generateRandomString = (length) => {
 const login = async (req, res) => {
   var state = generateRandomString(16);
   var scope =
-    "user-read-private user-library-read playlist-read-private playlist-modify-private playlist-modify-public";
+    "user-read-private user-library-read playlist-read-private playlist-modify-private playlist-modify-public user-top-read ";
 
   res.redirect(
     "https://accounts.spotify.com/authorize?" +
@@ -33,6 +35,9 @@ const login = async (req, res) => {
       })
   );
 };
+
+const redirect_dashboard = process.env.dashboardpage;
+const redirect_tryagain = process.env.tryagain;
 
 const callback = async (req, res) => {
   var code = req.query.code || null;
@@ -73,13 +78,15 @@ const callback = async (req, res) => {
         }
       );
       access_token = response.data.access_token;
-      console.log(access_token);
-      res.redirect("http://localhost:5000/data");
+      res.status(200).redirect(redirect_dashboard);
     } catch (e) {
       console.error(e);
-      res.status(500).send(e);
+      res.status(500).res.response(redirect_tryagain);
     }
   }
 };
 
-module.exports = { login, callback };
+const tokenEndpoint = async (req, res) => {
+  res.json({ access_token });
+};
+module.exports = { login, callback, tokenEndpoint };

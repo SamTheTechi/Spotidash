@@ -9,7 +9,7 @@ const Login = () => {
 
   return (
     <>
-      <main className="bg-black text-white overflow-x-hidden h-screen w-screen  box-border">
+      <main className="bg-black text-white overflow-x-hidden h-screen w-screen m-0 p-0  box-border">
         <header className=" flex justify-start items-start h-[20%] w-[100%] p-5 overflow-hidden">
           <img
             src="https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png"
@@ -17,12 +17,12 @@ const Login = () => {
             className="pr-1 h-[1.6rem]"
           />
           <h2 className="items-center text-[1rem] font-semibold">
-            SpotifyDash
+            SpotiSearch
           </h2>
         </header>
         <article className="pt-[10vh] flex items-center justify-around flex-col h-[40%]">
           <section className=" h-[auto] text-3xl font-bold p-5">
-            Login to Countinue <br /> to SpotiDash.
+            Login to Countinue <br /> to SpotiSearch.
           </section>
           <section className=" h-[auto]">
             <button
