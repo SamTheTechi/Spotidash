@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { TokenContext } from "../../context/tokenContext";
+import { TokenContext, PlaylistContext } from "../../context/Context";
 
 const Weekly = () => {
+  const { userPlaylist } = useContext(PlaylistContext);
   const { token } = useContext(TokenContext);
   const [data, setData] = useState(null);
 
