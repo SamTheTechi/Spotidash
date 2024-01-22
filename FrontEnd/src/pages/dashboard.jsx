@@ -1,33 +1,27 @@
 import React from "react";
+import Player from "./dasComp/player";
+import TopSongs from "./dasComp/topsongs";
+import TopArtist from "./dasComp/topartist";
+import Weekly from "./dasComp/weekly";
 
 const Dashboard = () => {
   return (
     <>
-      <main className="bg-black h-screen w-screen text-white overflow-x box-border m-0 p-0 flex justify-center">
-        <div className="h-[100%] w-[65vw] flex items-center">
-          <section className="h-[90%] w-[100%] bg-white flex">
-            <article className="w-[40%] h-[100%] grid grid-rows-3">
-              <div className="bg-red-500"></div>
-              <div className="bg-blue-500"></div>
-              <div className="bg-green-500"></div>
-            </article>
-            <article className="w-[60%] h-[100%]">
-              {/* <iframe
-                src="https://open.spotify.com/embed/playlist/6kQ7sSwrEXpMN68EwzIStS?utm_source=generator"
-                width="100%"
-                height="30%"
-                allowfullscreen=""
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"
-              /> */}
-              <div className="bg-yellow-500 h-[30%]"></div>
-              <div className=" h-[70%] flex">
-                <div className="bg-orange-500 h-[100%] w-[55%]"></div>
-                <div className="bg-purple-500 h-[100%] w-[45%]"></div>
-              </div>
-            </article>
-          </section>
-        </div>
+      <main className="bg-black h-screen w-screen text-white overflow-x box-border m-0 p-0 flex justify-center items-center">
+        <section className=" w-[95%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[50%] flex items-center h-[85%]">
+          <article className="w-[35%] h-[100%] grid grid-rows-3 ml-1 mb-1 mr-1">
+            <div className="bg-pink-500"></div>
+            <Weekly />
+            <div className="bg-yellow-500"></div>
+          </article>
+          <article className="w-[65%] h-[100%]">
+            <Player height={30} />
+            <div className=" h-[70%] flex">
+              <TopSongs width={65} />
+              <TopArtist width={45} />
+            </div>
+          </article>
+        </section>
       </main>
     </>
   );

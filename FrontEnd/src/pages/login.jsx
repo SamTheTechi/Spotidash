@@ -17,12 +17,12 @@ const Login = () => {
             className="pr-1 h-[1.6rem]"
           />
           <h2 className="items-center text-[1rem] font-semibold">
-            SpotifyDash
+            SpotiSearch
           </h2>
         </header>
         <article className="pt-[10vh] flex items-center justify-around flex-col h-[40%]">
           <section className=" h-[auto] text-3xl font-bold p-5">
-            Login to Countinue <br /> to SpotiDash.
+            Login to Countinue <br /> to SpotiSearch.
           </section>
           <section className=" h-[auto]">
             <button

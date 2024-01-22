@@ -22,7 +22,7 @@ let generateRandomString = (length) => {
 const login = async (req, res) => {
   var state = generateRandomString(16);
   var scope =
-    "user-read-private user-library-read playlist-read-private playlist-modify-private playlist-modify-public";
+    "user-read-private user-library-read playlist-read-private playlist-modify-private playlist-modify-public user-top-read ";
 
   res.redirect(
     "https://accounts.spotify.com/authorize?" +
@@ -78,7 +78,6 @@ const callback = async (req, res) => {
         }
       );
       access_token = response.data.access_token;
-      console.log(access_token);
       res.status(200).redirect(redirect_dashboard);
     } catch (e) {
       console.error(e);
