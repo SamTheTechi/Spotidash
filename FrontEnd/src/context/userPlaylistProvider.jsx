@@ -2,7 +2,7 @@ import { TokenContext, PlaylistContext } from "./Context";
 import axios from "axios";
 import React, { useEffect, useState, useContext } from "react";
 
-const UserPlaylistProvider = ({ Children }) => {
+const UserPlaylistProvider = ({ children }) => {
   const { token } = useContext(TokenContext);
   const [userPlaylist, setUserPlaylist] = useState([]);
 
@@ -17,7 +17,8 @@ const UserPlaylistProvider = ({ Children }) => {
             },
           }
         );
-        setUserPlaylist(response.data);
+        const res = response.data.items;
+        setUserPlaylist(res);
       } catch (e) {
         throw e;
       }
@@ -26,11 +27,9 @@ const UserPlaylistProvider = ({ Children }) => {
   }, [token]);
 
   return (
-    <>
-      <PlaylistContext.Provider value={userPlaylist}>
-        {Children}
-      </PlaylistContext.Provider>
-    </>
+    <PlaylistContext.Provider value={{ userPlaylist }}>
+      {children}
+    </PlaylistContext.Provider>
   );
 };
 

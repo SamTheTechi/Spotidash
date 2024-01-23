@@ -36,12 +36,15 @@ const TopArtist = ({ width }) => {
             (item) => item.height === 160 || item.height === 64
           )?.url;
           let Genres = items.genres.map((genre) => genre.name).join(", ");
+          let ArtistUrl = items.external_urls.spotify;
+
           return (
             <ArtistLayer
               key={key}
               Name={Name}
               imgUrl={imgUrl}
               Genres={Genres}
+              ArtistUrl={ArtistUrl}
             />
           );
         })}
@@ -50,10 +53,17 @@ const TopArtist = ({ width }) => {
   );
 };
 
-const ArtistLayer = ({ imgUrl, Name, Genres }) => {
+const ArtistLayer = ({ imgUrl, Name, Genres, ArtistUrl }) => {
+  const handleClick = () => {
+    window.location.href = ArtistUrl;
+  };
+
   return (
     <>
-      <article className="p-1 pb-2 flex">
+      <article
+        onClick={handleClick}
+        className="p-1 pb-2 flex hover:scale-105 transition-[2s] hover:text-black"
+      >
         <img
           src={imgUrl}
           alt={Name}

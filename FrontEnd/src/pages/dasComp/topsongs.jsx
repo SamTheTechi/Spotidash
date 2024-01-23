@@ -36,6 +36,7 @@ const TopSongs = ({ width }) => {
           let Name = items.name;
           let Artist = items.artists.map((artist) => artist.name)?.join(", ");
           let PreviewUrl = items.preview_url;
+          // console.log(PreviewUrl);
           let key = items.uri.split(":")[2];
           if (!imgUrl) {
             return <p>no valid image</p>;
@@ -58,7 +59,8 @@ const TopSongs = ({ width }) => {
 const SongLayer = ({ imgUrl, Name, Artist, PreviewUrl }) => {
   return (
     <>
-      <article className="p-1 pb-2 flex">
+      <article className="p-1.5 pb-2 flex hover:scale-105 transition-[2s] hover:text-black">
+        <audio src={PreviewUrl}></audio>
         <img
           src={imgUrl}
           alt={Name}
