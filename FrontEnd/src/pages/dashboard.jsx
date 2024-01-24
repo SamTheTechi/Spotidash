@@ -1,12 +1,58 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
+import { TokenContext } from "../context/Context";
 import Player from "./dasComp/player";
 import TopSongs from "./dasComp/topsongs";
 import TopArtist from "./dasComp/topartist";
 import Weekly from "./dasComp/weekly";
 import Blend from "./dasComp/blend";
 import Deepsearch from "./dasComp/deepsearch";
+const baseURL = "http://localhost:5000/api/v1/weeklyPLaylistData";
 
 const Dashboard = () => {
+  const { token } = useCallback(TokenContext);
+  const [userID, setUserID] = useState("");
+  const [newUser, setNewUser] = useState(null);
+
+  useEffect(() => {
+    const userInfo = async () => {
+      try {
+        const response = await axios.get(`https://api.spotify.com/v1/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const resID = response.id;
+        console.log(resID);
+        setUserID(resID);
+      } catch (e) {
+        throw e;
+      }
+    };
+    userInfo();
+  }, [token]);
+
+  useEffect(() => {
+    const newUser = async () => {
+      try {
+        await axios.post(baseURL, userID);
+        console.log(`data send`);
+      } catch (e) {
+        throw e;
+      }
+    };
+    newUser();
+  }, [userID]);
+
+  useEffect(() => {
+    const sendUserID = async () => {
+      try {
+        const sendID = await axios.post();
+      } catch (e) {
+        throw e;
+      }
+    };
+  }, []);
   return (
     <>
       <main className="bg-black h-screen w-screen text-white overflow-x box-border m-0 p-0 flex justify-center items-center">

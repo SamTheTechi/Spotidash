@@ -1,12 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
 import { PlaylistContext } from "../../context/Context";
+import axios from "axios";
 
 const Weekly = () => {
   const { userPlaylist } = useContext(PlaylistContext);
   const weeklyPlaylist = userPlaylist.filter(
     (item) => item.name === "Discover Weekly"
   );
+
+  const handleClick = (e) => {
+    e.preventDefault();
+
+    window.location.pathname = "dashboard/weekly";
+  };
 
   let res =
     weeklyPlaylist.images && weeklyPlaylist.images.length > 0
@@ -15,7 +21,10 @@ const Weekly = () => {
 
   return (
     <>
-      <div className="border-[5px] border-[rgba(0,0,0,0.1)] rounded-[15px]  flex justify-center items-center overflow-hidden m-1.5 bg-pink-400">
+      <div
+        onClick={handleClick}
+        className="border-[5px] border-[rgba(0,0,0,0.1)] rounded-[15px]  flex justify-center items-center overflow-hidden m-1.5 bg-pink-400"
+      >
         <img
           src={res}
           alt="Discover Weekly"

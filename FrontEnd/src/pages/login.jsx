@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 
 const Login = () => {
   const handleClick = () => {
-    console.log(`clicked`);
-    // window.location.port = `5000`;
     window.location.href = `http://localhost:5000/login`;
   };
 
@@ -26,7 +24,7 @@ const Login = () => {
           </section>
           <section className=" h-[auto]">
             <button
-              className="text-black font-semibold bg-[#1ed760] hover:bg-[#169e46] min-w-[15rem] aspect-[5/1] rounded-[30px] pt-[-80px]"
+              className="text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover min-w-[15rem] aspect-[5/1] rounded-[30px] pt-[-80px]"
               onClick={handleClick}
             >
               Log in
