@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { PlaylistContext } from "../../context/Context";
+import axios from "axios";
 
 const Weekly = () => {
   const { userPlaylist } = useContext(PlaylistContext);
@@ -9,6 +10,7 @@ const Weekly = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
+
     window.location.pathname = "dashboard/weekly";
   };
 

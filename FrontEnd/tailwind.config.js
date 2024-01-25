@@ -6,6 +6,7 @@ export default {
       colors: {
         custonmGreen: "#1ed760",
         custonmGreenHover: "#169e46",
+        customGray: "#121212",
       },
     },
   },
