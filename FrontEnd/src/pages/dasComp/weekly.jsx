@@ -4,6 +4,7 @@ import axios from "axios";
 
 const Weekly = () => {
   const { userPlaylist } = useContext(PlaylistContext);
+
   const weeklyPlaylist = userPlaylist.filter(
     (item) => item.name === "Discover Weekly"
   );

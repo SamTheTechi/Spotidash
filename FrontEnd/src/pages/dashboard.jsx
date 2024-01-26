@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { TokenContext } from "../context/Context";
 import Player from "./dasComp/player";
@@ -7,10 +7,10 @@ import TopArtist from "./dasComp/topartist";
 import Weekly from "./dasComp/weekly";
 import Blend from "./dasComp/blend";
 import Deepsearch from "./dasComp/deepsearch";
-const baseURL = "http://localhost:5000/api/v1/weeklyPLaylistData";
+const baseURL = "http://localhost:5000/api/v1/UserId";
 
 const Dashboard = () => {
-  const { token } = useCallback(TokenContext);
+  const { token } = useContext(TokenContext);
   const [userID, setUserID] = useState("");
   const [newUser, setNewUser] = useState(null);
 
@@ -22,8 +22,7 @@ const Dashboard = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        const resID = response.id;
-        console.log(resID);
+        const resID = response.data.id;
         setUserID(resID);
       } catch (e) {
         throw e;
@@ -35,7 +34,7 @@ const Dashboard = () => {
   useEffect(() => {
     const newUser = async () => {
       try {
-        await axios.post(baseURL, userID);
+        await axios.post(baseURL, { id: userID });
         console.log(`data send`);
       } catch (e) {
         throw e;
@@ -62,9 +61,10 @@ const Dashboard = () => {
             <Weekly />
             <Deepsearch />
           </article>
+
           <article className="w-[65%] h-[100%]">
             <Player height={30} />
-            <div className=" h-[70%] flex">
+            <div className="w-[100%] h-[70%] flex">
               <TopSongs width={65} />
               <TopArtist width={45} />
             </div>
