@@ -5,12 +5,12 @@ const baseURL = "http://localhost:5000/api/v1/weeklyplaylist";
 
 const DiscoverWeekly = () => {
   const { userPlaylist } = useContext(PlaylistContext);
-  const [weeklyPlaylist, setWeeklyPlaylist] = useState("");
+  const [weeklyPlaylist, setWeeklyPlaylist] = useState([]);
   const [weeklyPlaylistExist, setweeklyPlaylistExist] = useState(false);
   const [NewplaylistData, setNewplaylistData] = useState({
     name: "",
     description: "",
-    weeklyPlaylistId: weeklyPlaylist,
+    weeklyPlaylistId: [],
   });
 
   useEffect(() => {
@@ -22,6 +22,10 @@ const DiscoverWeekly = () => {
       )
       .map((playlist) => playlist.id);
     setWeeklyPlaylist(weeklyPlaylistid);
+    setNewplaylistData((prevData) => ({
+      ...prevData,
+      weeklyPlaylistId: weeklyPlaylistid,
+    }));
   }, [userPlaylist]);
 
   const handleInput = (e) => {
@@ -41,13 +45,12 @@ const DiscoverWeekly = () => {
     const postPlaylistData = async () => {
       try {
         await axios.post(baseURL, NewplaylistData);
-        console.log(`weeklyplaylist data send`);
       } catch (e) {
         throw e;
       }
     };
     postPlaylistData();
-    // setweeklyPlaylistExist(true);
+    setweeklyPlaylistExist(true);
   };
 
   if (weeklyPlaylistExist === true) {
@@ -113,16 +116,6 @@ const DiscoverWeekly = () => {
                     className=" min-w-[18rem] aspect-[7/1] mt-1.5 pl-2 pr-2 bg-customGray border-[2px] rounded-md border-[rgb(100,100,100)] hover:border-white"
                   />
                 </label>
-                {/* <label className="flex justify-center items-start flex-col p-2">
-                Playlist Image
-                <input
-                  type="file"
-                  name="image"
-                  // onChange={handleInput}
-                  // value={NewplaylistData.description}
-                  className=" min-w-[15rem] aspect-[8/1] mt-1.5 pl-2 pr-2 "
-                />
-              </label> */}
               </div>
               <button
                 className="text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover min-w-[18rem] aspect-[6/1] rounded-[30px] pt-[-80px]"
@@ -130,7 +123,6 @@ const DiscoverWeekly = () => {
               >
                 Cleate playlist
               </button>
-              <p>{weeklyPlaylist}</p>
             </form>
           </section>
         </main>

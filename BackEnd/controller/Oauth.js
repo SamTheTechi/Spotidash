@@ -102,9 +102,6 @@ const WeeklyplaylistEndpoint = async (req, res) => {
   const Name = await req.body.name;
   const Description = await req.body.description;
   const weeklyPlaylistId = await req.body.weeklyPlaylistId;
-  console.log(Name);
-  console.log(weeklyPlaylistId);
-  console.log(Description);
 
   const Createplaylist = async () => {
     try {
@@ -120,7 +117,7 @@ const WeeklyplaylistEndpoint = async (req, res) => {
           },
         }
       );
-      // Fetchplaylist();
+      Fetchplaylist();
     } catch (e) {
       throw e;
     }
@@ -157,11 +154,10 @@ const WeeklyplaylistEndpoint = async (req, res) => {
           }
         );
         const data = response.data.items;
-        const songs = map((items) => items.track.uri);
+        const songs = data.map((items) => items.track.uri);
         weeklyPlaylistSongs = weeklyPlaylistSongs.concat(songs);
         offset += 50;
       } while (offset < response.data.total);
-      console.log(weeklyPlaylistSongs);
     } catch (e) {
       throw e;
     }
@@ -169,11 +165,12 @@ const WeeklyplaylistEndpoint = async (req, res) => {
 
   const AddSongs = async (songsToBeAdded, newWeeklyPlaylist, access_token) => {
     try {
-      songsToBeAdded.map(async (item) => {
+      for (const item of songsToBeAdded) {
+        if (!item) {
+          continue;
+        }
+
         try {
-          if (item === null) {
-            return;
-          }
           let response = await axios.post(
             `https://api.spotify.com/v1/playlists/${newWeeklyPlaylist}/tracks`,
             {
@@ -186,21 +183,30 @@ const WeeklyplaylistEndpoint = async (req, res) => {
               },
             }
           );
+
           let track = item.split(":")[2];
-          await new Promise((resolve) => setTimeout(resolve, 50));
+          await new Promise((resolve) => setTimeout(resolve, 100));
           console.log(`TrackAdded -> ${track}`);
-          return response;
         } catch (e) {
-          throw e;
+          console.error(`Error adding track: ${e.message}`);
         }
-      });
+      }
+    } catch (e) {
+      console.error(`Error in AddSongs function: ${e.message}`);
+    }
+  };
+
+  const MainFunc = async () => {
+    try {
+      await Createplaylist();
+      await FetchSWeeklySongs();
+      await AddSongs(weeklyPlaylistSongs, newWeeklyPlaylist, access_token);
     } catch (e) {
       throw e;
     }
   };
-  Createplaylist();
-  // FetchSWeeklySongs();
-  // AddSongs(weeklyPlaylistSongs, newWeeklyPlaylist, access_token);
+  MainFunc();
+  res.status(200).send(`working fine ig?`);
 };
 
 module.exports = {
