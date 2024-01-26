@@ -10,7 +10,7 @@ const TopArtist = ({ width }) => {
     const Tracks = async () => {
       try {
         const response = await axios.get(
-          `https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=10`,
+          `https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=15`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -27,7 +27,7 @@ const TopArtist = ({ width }) => {
   return (
     <>
       <section
-        className={`flex flex-col ml-1.5 bg-green-600 overflow-auto w-[${width}%] rounded-[15px] scrollbar-hide border-[5px] border-[rgba(0,0,0,0.1)] `}
+        className={`flex flex-col ml-1.5 bg-green-600 overflow-x-scroll overflow-y-auto w-[${width}%] rounded-[15px] scrollbar-hide border-[5px] border-[rgba(0,0,0,0.1)] `}
       >
         {data.map((items) => {
           let key = items.id;
@@ -71,7 +71,7 @@ const ArtistLayer = ({ imgUrl, Name, Genres, ArtistUrl }) => {
         />
         <div className="flex flex-col p-1">
           <div className=" text-base">{Name}</div>
-          <div className="font-thin">{Genres}</div>
+          {/* <div className="font-thin">{Genres}</div> */}
         </div>
       </article>
     </>

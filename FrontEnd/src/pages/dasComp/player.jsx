@@ -24,7 +24,9 @@ const Player = ({ height }) => {
     Tracks();
   }, [token]);
   if (!token) {
-    return <h1>loading..</h1>;
+    return (
+      <h1 className="h-[30%] flex p-5 text-2xl items-center">Loading...</h1>
+    );
   }
   return (
     <>
