@@ -1,13 +1,19 @@
 import React, { useState, useEffect, useContext } from "react";
 import { PlaylistContext } from "../../context/Context";
-import axios from "axios";
 
 const Weekly = () => {
   const { userPlaylist } = useContext(PlaylistContext);
-
-  const weeklyPlaylist = userPlaylist.filter(
-    (item) => item.name === "Discover Weekly"
-  );
+  const [weeklyPlaylist, setWeeklyPlaylist] = useState([]);
+  useEffect(() => {
+    const weeklyPlaylistId = userPlaylist
+      .filter(
+        (item) =>
+          item.name === "Discover Weekly" &&
+          item.owner.display_name === `Spotify`
+      )
+      .map((playlist) => playlist.id);
+    setWeeklyPlaylist(weeklyPlaylistId);
+  }, [userPlaylist]);
 
   const handleClick = (e) => {
     e.preventDefault();
