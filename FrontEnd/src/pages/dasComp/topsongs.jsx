@@ -10,7 +10,7 @@ const TopSongs = ({ width }) => {
     const Tracks = async () => {
       try {
         const response = await axios.get(
-          `https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=30`,
+          `https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=50`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -73,8 +73,7 @@ const SongLayer = ({ imgUrl, Name, Artist, PreviewUrl }) => {
         onClick={handlePreviewSong}
       >
         <audio ref={audioRef} src={PreviewUrl}></audio>
-        {PreviewUrl}
-        {/* <img
+        <img
           src={imgUrl}
           alt={Name}
           className=" aspect-square h-[64px] rounded-[8px]"
@@ -82,7 +81,7 @@ const SongLayer = ({ imgUrl, Name, Artist, PreviewUrl }) => {
         <div className="flex flex-col p-1 justify-around">
           <div className=" text-base">{Name}</div>
           <div className="font-thin text-xs">{Artist}</div>
-        </div> */}
+        </div>
       </article>
     </>
   );

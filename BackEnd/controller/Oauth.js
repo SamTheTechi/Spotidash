@@ -206,13 +206,39 @@ const WeeklyplaylistEndpoint = async (req, res) => {
     }
   };
   MainFunc();
-  res.status(200).send(`working fine ig?`);
+  res.status(200).send(`weekly fine ig?`);
 };
 
+const BlendplaylistEndpoint = async (req, res) => {
+  const filterPlaylist = await req.body.filterlist;
+  const blendPlaylist = await req.body.blendlist;
+
+  const Createplaylist = async () => {
+    try {
+      await axios.post(
+        `https://api.spotify.com/v1/users/${userId}/playlists`,
+        {
+          name: `Filterd Playlist`,
+          description: `testing one two threej`,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+    } catch (e) {
+      throw e;
+    }
+  };
+  Createplaylist;
+  res.status(200).send(`blend worked`);
+};
 module.exports = {
   login,
   callback,
   tokenEndpoint,
   UserIdEndpoint,
   WeeklyplaylistEndpoint,
+  BlendplaylistEndpoint,
 };
