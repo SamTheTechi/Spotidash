@@ -118,7 +118,7 @@ const DiscoverWeekly = () => {
                 </label>
               </div>
               <button
-                className="text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover min-w-[18rem] aspect-[6/1] rounded-[30px] pt-[-80px]"
+                className="text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover min-w-[18rem] aspect-[6/1] rounded-[30px] pt-[-80px] border-[5px] border-[rgba(0,0,0,0.2)]"
                 type="submit"
               >
                 Cleate playlist

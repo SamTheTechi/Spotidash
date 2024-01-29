@@ -24,7 +24,7 @@ const Login = () => {
           </section>
           <section className=" h-[auto]">
             <button
-              className="text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover min-w-[15rem] aspect-[5/1] rounded-[30px] pt-[-80px]"
+              className="text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover min-w-[15rem] aspect-[5/1] rounded-[30px] pt-[-80px] border-[5px] border-[rgba(0,0,0,0.2)]"
               onClick={handleClick}
             >
               Log in
