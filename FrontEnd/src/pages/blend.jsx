@@ -11,6 +11,10 @@ const FilterBlend = () => {
   const [userliked, setUserliked] = useState([]);
   const [holderColorBlend, setHolderColorBlend] = useState("");
   const [holderColorFilter, setHolderColorFilter] = useState("");
+  const [selectedItems, setSelectedItems] = useState({
+    blendlist: [],
+    filterlist: [],
+  });
 
   const Colors = [
     `rgb(192,255,69)`,
@@ -23,9 +27,23 @@ const FilterBlend = () => {
   ];
 
   const onSubmit = () => {
-    const SelectedBlends = usersBlends.filter((item) => item.id !== cheakBox);
-    console.log(SelectedBlends);
+    e.preventDefault();
+    if (usersBlends.length === 0) {
+      console.log(`Blend playlist not found`);
+    }
+    const postPlaylistData = async () => {
+      try {
+        await axios.post(baseURL, selectedItems);
+      } catch (e) {
+        throw e;
+      }
+    };
+    postPlaylistData();
+    setTimeout(() => {
+      setBlendPlaylistExist(true);
+    }, 500);
   };
+
   useEffect(() => {
     const getLikedsongs = async () => {
       try {

@@ -50,7 +50,9 @@ const DiscoverWeekly = () => {
       }
     };
     postPlaylistData();
-    setweeklyPlaylistExist(true);
+    setTimeout(() => {
+      setweeklyPlaylistExist(true);
+    }, 500);
   };
 
   if (weeklyPlaylistExist === true) {
