@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import { TokenContext } from "../../context/Context";
 
@@ -36,7 +36,6 @@ const TopSongs = ({ width }) => {
           let Name = items.name;
           let Artist = items.artists.map((artist) => artist.name)?.join(", ");
           let PreviewUrl = items.preview_url;
-          // console.log(PreviewUrl);
           let key = items.uri.split(":")[2];
           if (!imgUrl) {
             return <p>no valid image</p>;
@@ -57,11 +56,25 @@ const TopSongs = ({ width }) => {
 };
 
 const SongLayer = ({ imgUrl, Name, Artist, PreviewUrl }) => {
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useRef(false);
+
+  const handlePreviewSong = () => {
+    if (audioRef.current) {
+      playing ? audioRef.current.pause() : audioRef.current.play();
+      setPlaying(!playing);
+    }
+  };
+
   return (
     <>
-      <article className="p-1.5 pb-2 flex hover:scale-105 transition-[2s] hover:text-black">
-        <audio src={PreviewUrl}></audio>
-        <img
+      <article
+        className="p-1.5 pb-2 flex hover:scale-105 transition-[2s] hover:text-black"
+        onClick={handlePreviewSong}
+      >
+        <audio ref={audioRef} src={PreviewUrl}></audio>
+        {PreviewUrl}
+        {/* <img
           src={imgUrl}
           alt={Name}
           className=" aspect-square h-[64px] rounded-[8px]"
@@ -69,7 +82,7 @@ const SongLayer = ({ imgUrl, Name, Artist, PreviewUrl }) => {
         <div className="flex flex-col p-1 justify-around">
           <div className=" text-base">{Name}</div>
           <div className="font-thin text-xs">{Artist}</div>
-        </div>
+        </div> */}
       </article>
     </>
   );
