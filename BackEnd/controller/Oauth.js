@@ -3,8 +3,8 @@ const { StatusCode } = require(`http-status-codes`);
 const axios = require(`axios`);
 const querystring = require("querystring");
 
-var client_id = "80201b446e0445c9b94eff48aaa32f5e";
-var client_secret = "cf112194a22b45109b223f600eece71c";
+var client_id = process.env.client_id;
+var client_secret = process.env.client_secret;
 var redirect_uri = "http://localhost:5000/callback";
 let access_token = ``;
 let userId = "";
