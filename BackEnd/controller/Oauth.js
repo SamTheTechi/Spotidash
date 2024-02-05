@@ -210,8 +210,9 @@ const WeeklyplaylistEndpoint = async (req, res) => {
 };
 
 const BlendplaylistEndpoint = async (req, res) => {
-  const filterPlaylist = await req.body.filterlist;
-  const blendPlaylist = await req.body.blendlist;
+  const filterPlaylist =
+    (await req.body.filterlist) || `0sVi0nfDGUzItMrgUWbys0`;
+  const blendPlaylist = (await req.body.blendlist) || `37i9dQZF1EJvQo3pOUilze`;
 
   const Createplaylist = async () => {
     try {
@@ -231,7 +232,7 @@ const BlendplaylistEndpoint = async (req, res) => {
       throw e;
     }
   };
-  Createplaylist;
+  Createplaylist();
   res.status(200).send(`blend worked`);
 };
 module.exports = {
