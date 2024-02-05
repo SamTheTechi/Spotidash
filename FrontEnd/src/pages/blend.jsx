@@ -6,8 +6,8 @@ const baseURL = "http://localhost:5000/api/v1/blendplaylist";
 const FilterBlend = () => {
   const { token } = useContext(TokenContext);
   const { userPlaylist } = useContext(PlaylistContext);
-  const [usersBlends, setUsersBlends] = useState([]);
-  const [usersFilter, setUsersFilter] = useState([]);
+  const [selectedBlends, setSelectedBlends] = useState([]);
+  const [seletedFilter, setSeletedFilter] = useState([]);
   const [userliked, setUserliked] = useState([]);
   const [holderColorBlend, setHolderColorBlend] = useState("");
   const [holderColorFilter, setHolderColorFilter] = useState("");
@@ -28,7 +28,7 @@ const FilterBlend = () => {
 
   const onSubmit = () => {
     e.preventDefault();
-    if (usersBlends.length === 0) {
+    if (selectedBlends.length === 0) {
       console.log(`Blend playlist not found`);
     }
     const postPlaylistData = async () => {
@@ -83,7 +83,7 @@ const FilterBlend = () => {
         item.description.slice(2, 7) === `Blend` &&
         item.owner.display_name === `Spotify`
     );
-    setUsersBlends(blendIds);
+    setSelectedBlends(blendIds);
     const notBlendIds = userPlaylist.filter((item) => {
       if (item.owner.display_name === `Spotify`) {
         return item.description.slice(2, 7) !== `Blend`;
@@ -94,7 +94,7 @@ const FilterBlend = () => {
         );
       }
     });
-    setUsersFilter(notBlendIds);
+    setSeletedFilter(notBlendIds);
   }, [userPlaylist]);
 
   return (
@@ -116,7 +116,7 @@ const FilterBlend = () => {
             style={{ scrollbarWidth: "thin" }}
           >
             <form>
-              {usersBlends.map((items) => {
+              {selectedBlends.map((items) => {
                 let Name = items.name;
                 let imgUrl = items.images[0].url;
                 let Key = items.id;
@@ -135,7 +135,7 @@ const FilterBlend = () => {
           >
             <form>
               {/* <SelectPlatlist key={} playlistImage={} playlistName={}/> */}
-              {usersFilter.map((items) => {
+              {seletedFilter.map((items) => {
                 let Name = items.name;
                 let imgUrl = items.images[0].url;
                 let Key = items.id;
