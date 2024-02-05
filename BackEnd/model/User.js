@@ -2,16 +2,15 @@ const mongoose = require("mongoose");
 
 const UserInfo = new mongoose.Schema({
   UserKey: {
-    type: Number,
-    require: true,
+    type: String,
     unique: true,
+    required: true,
   },
 
   Weekly: {
     Exist: {
       type: Boolean,
       default: false,
-      require: true,
     },
     WeeklyID: {
       type: String,
@@ -28,21 +27,25 @@ const UserInfo = new mongoose.Schema({
       selectedBlends: [
         {
           type: String,
-          unique: true,
+          default: null,
         },
       ],
       selectedFilter: [
         {
           type: String,
-          unique: true,
+          default: null,
         },
       ],
       PlaylistID: {
         type: String,
-        unique: true,
+        default: null,
       },
     },
   ],
+  Date: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 module.exports = mongoose.model(`UserInfo`, UserInfo);
