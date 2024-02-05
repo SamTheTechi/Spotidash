@@ -1,8 +1,11 @@
-export const Createplaylist = async (
+const axios = require("axios");
+
+const Createplaylist = async (
   Name,
   Description,
   UserID,
-  access_token
+  access_token,
+  Fetchplaylist
 ) => {
   try {
     await axios.post(
@@ -22,3 +25,5 @@ export const Createplaylist = async (
     throw e;
   }
 };
+
+module.exports = { Createplaylist };

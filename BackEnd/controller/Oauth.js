@@ -4,7 +4,7 @@ const querystring = require("querystring");
 const mongoose = require(`mongoose`);
 const axios = require(`axios`);
 const Database = require(`../model/User`);
-import { Createplaylist } from "./function";
+const { Createplaylist } = require("./function");
 
 const client_id = process.env.client_id;
 const client_secret = process.env.client_secret;
