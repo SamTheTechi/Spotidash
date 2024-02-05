@@ -1,11 +1,18 @@
 require(`dotenv`).config();
-const { StatusCode } = require(`http-status-codes`);
-const axios = require(`axios`);
-const querystring = require("querystring");
 
-var client_id = process.env.client_id;
-var client_secret = process.env.client_secret;
-var redirect_uri = "http://localhost:5000/callback";
+const querystring = require("querystring");
+const mongoose = require(`mongoose`);
+const axios = require(`axios`);
+const Database = require(`../model/User`);
+import { Createplaylist } from "./function";
+
+const client_id = process.env.client_id;
+const client_secret = process.env.client_secret;
+
+const redirect_uri = "http://localhost:5000/callback";
+const redirect_dashboard = process.env.dashboardpage;
+const redirect_tryagain = process.env.tryagain;
+
 let access_token = ``;
 let userId = "";
 
@@ -36,9 +43,6 @@ const login = async (req, res) => {
       })
   );
 };
-
-const redirect_dashboard = process.env.dashboardpage;
-const redirect_tryagain = process.env.tryagain;
 
 const callback = async (req, res) => {
   var code = req.query.code || null;
@@ -95,6 +99,15 @@ const tokenEndpoint = async (req, res) => {
 const UserIdEndpoint = async (req, res) => {
   const receivedData = await req.body.id;
   userId = receivedData;
+  try {
+    const IsUserPresent = await Database.findOne({ UserKey: userId });
+    if (!IsUserPresent) {
+      await Database.create({ UserKey: userId });
+      console.log(`user created`);
+    }
+  } catch (e) {
+    return;
+  }
   res.json({ userId: receivedData });
 };
 
@@ -103,25 +116,12 @@ const WeeklyplaylistEndpoint = async (req, res) => {
   const Description = await req.body.description;
   const weeklyPlaylistId = await req.body.weeklyPlaylistId;
 
-  const Createplaylist = async () => {
-    try {
-      await axios.post(
-        `https://api.spotify.com/v1/users/${userId}/playlists`,
-        {
-          name: Name,
-          description: Description,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
-      Fetchplaylist();
-    } catch (e) {
-      throw e;
-    }
-  };
+  //new playlist Created to store weekly songs
+
+  Createplaylist(Name, Description, userId, access_token);
+
+  // getting the ID of Newly created Playlist
+
   let newWeeklyPlaylist = "";
   const Fetchplaylist = async () => {
     try {
@@ -140,6 +140,9 @@ const WeeklyplaylistEndpoint = async (req, res) => {
       throw e;
     }
   };
+
+  // fetching/adding weekly songs to an array
+
   let weeklyPlaylistSongs = [];
   const FetchSWeeklySongs = async () => {
     try {
@@ -162,6 +165,8 @@ const WeeklyplaylistEndpoint = async (req, res) => {
       throw e;
     }
   };
+
+  // adding weekly tracks to newly created playlist
 
   const AddSongs = async (songsToBeAdded, newWeeklyPlaylist, access_token) => {
     try {
