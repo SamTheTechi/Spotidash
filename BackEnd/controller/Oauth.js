@@ -4,7 +4,12 @@ const querystring = require("querystring");
 const mongoose = require(`mongoose`);
 const axios = require(`axios`);
 const Database = require(`../model/User`);
-const { Createplaylist } = require("./function");
+const {
+  Createplaylist,
+  FetchAllUserPlaylist,
+  FetchSongs,
+  AddSongsIntoPlaylist,
+} = require("./function");
 
 const client_id = process.env.client_id;
 const client_secret = process.env.client_secret;
@@ -116,102 +121,42 @@ const WeeklyplaylistEndpoint = async (req, res) => {
   const Description = await req.body.description;
   const weeklyPlaylistId = await req.body.weeklyPlaylistId;
 
-  //new playlist Created to store weekly songs
+  weeklyExist = await Database.findOne({
+    UserKey: userId,
+    "Weekly.Exist": false,
+  });
 
-  Createplaylist(Name, Description, userId, access_token);
+  if (weeklyExist) {
+    const newWeeklyPlaylist = await Createplaylist(
+      Name,
+      Description,
+      userId,
+      access_token
+    );
+    const PlaylistSongs = await FetchSongs(
+      weeklyPlaylistId,
+      50,
+      0,
+      access_token
+    );
 
-  // getting the ID of Newly created Playlist
+    await AddSongsIntoPlaylist(PlaylistSongs, newWeeklyPlaylist, access_token);
 
-  let newWeeklyPlaylist = "";
-  const Fetchplaylist = async () => {
-    try {
-      const response = await axios.get(
-        "https://api.spotify.com/v1/me/playlists",
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
-      newWeeklyPlaylist = response.data.items
-        .filter((items) => items.name === Name)
-        .map((item) => item.id)[0];
-    } catch (e) {
-      throw e;
-    }
-  };
-
-  // fetching/adding weekly songs to an array
-
-  let weeklyPlaylistSongs = [];
-  const FetchSWeeklySongs = async () => {
-    try {
-      let offset = 0;
-      do {
-        var response = await axios.get(
-          `https://api.spotify.com/v1/playlists/${weeklyPlaylistId}/tracks?limit=50&offset=${offset}`,
-          {
-            headers: {
-              Authorization: `Bearer ${access_token}`,
-            },
-          }
-        );
-        const data = response.data.items;
-        const songs = data.map((items) => items.track.uri);
-        weeklyPlaylistSongs = weeklyPlaylistSongs.concat(songs);
-        offset += 50;
-      } while (offset < response.data.total);
-    } catch (e) {
-      throw e;
-    }
-  };
-
-  // adding weekly tracks to newly created playlist
-
-  const AddSongs = async (songsToBeAdded, newWeeklyPlaylist, access_token) => {
-    try {
-      for (const item of songsToBeAdded) {
-        if (!item) {
-          continue;
-        }
-
-        try {
-          let response = await axios.post(
-            `https://api.spotify.com/v1/playlists/${newWeeklyPlaylist}/tracks`,
-            {
-              uris: [item],
-              position: 0,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${access_token}`,
-              },
-            }
-          );
-
-          let track = item.split(":")[2];
-          await new Promise((resolve) => setTimeout(resolve, 100));
-          console.log(`TrackAdded -> ${track}`);
-        } catch (e) {
-          console.error(`Error adding track: ${e.message}`);
-        }
+    await Database.findOneAndUpdate(
+      { "Weekly.Exist": false },
+      {
+        $set: {
+          "Weekly.Exist": true,
+          "Weekly.WeeklyID": weeklyPlaylistId[0],
+          "Weekly.PlaylistID": newWeeklyPlaylist[0],
+        },
       }
-    } catch (e) {
-      console.error(`Error in AddSongs function: ${e.message}`);
-    }
-  };
+    );
 
-  const MainFunc = async () => {
-    try {
-      await Createplaylist();
-      await FetchSWeeklySongs();
-      await AddSongs(weeklyPlaylistSongs, newWeeklyPlaylist, access_token);
-    } catch (e) {
-      throw e;
-    }
-  };
-  MainFunc();
-  res.status(200).send(`weekly fine ig?`);
+    res.status(200).send(`weekly fine ig?`);
+  } else {
+    console.log("playlist already exist ");
+  }
 };
 
 const BlendplaylistEndpoint = async (req, res) => {
