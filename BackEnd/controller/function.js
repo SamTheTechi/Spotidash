@@ -93,6 +93,7 @@ const AddSongsIntoPlaylist = async (songs, PlaylistId, access_token) => {
         console.error(`Error adding track: ${e.message}`);
       }
     }
+    console.log(`All Traks Added`);
   } catch (e) {
     console.error(`Error in AddSongs function: ${e.message}`);
   }

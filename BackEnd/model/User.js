@@ -18,11 +18,11 @@ const UserInfo = new mongoose.Schema({
     },
     WeeklyID: {
       type: String,
-      default: null,
+      default: "NO ID yet",
     },
     PlaylistID: {
       type: String,
-      default: null,
+      default: "NO ID yet",
     },
   },
 

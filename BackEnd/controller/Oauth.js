@@ -120,7 +120,7 @@ const WeeklyplaylistEndpoint = async (req, res) => {
   const Name = await req.body.name;
   const Description = await req.body.description;
   const weeklyPlaylistId = await req.body.weeklyPlaylistId;
-  
+
   const PlaylistExist = await Database.findOne({
     UserKey: userId,
     "Weekly.Exist": false,
@@ -128,18 +128,23 @@ const WeeklyplaylistEndpoint = async (req, res) => {
 
   const weeklyPlaylistExist = await Database.findOne({
     UserKey: userId,
-    "Weekly.PlaylistID": 
-  })
+    "Weekly.Exist": true,
+  });
 
+  const val = await FetchAllUserPlaylist(access_token);
+  const data = await val
+    .filter((items) => items.id === weeklyPlaylistExist.Weekly.PlaylistID)
+    .map((item) => item.id)[0];
 
-  if (PlaylistExist || ) {
+  if (PlaylistExist || !data) {
     const newWeeklyPlaylist = await Createplaylist(
       Name,
       Description,
       userId,
       access_token
     );
-    console.log(`new playlist crated of user ${userId}`);
+    console.log(`new playlist created for user ${userId}`);
+
     const PlaylistSongs = await FetchSongs(
       weeklyPlaylistId,
       50,
@@ -149,11 +154,23 @@ const WeeklyplaylistEndpoint = async (req, res) => {
 
     await AddSongsIntoPlaylist(PlaylistSongs, newWeeklyPlaylist, access_token);
 
-    console.log(weeklyPlaylistId);
-    console.log(newWeeklyPlaylist);
+    await Database.findOneAndUpdate(
+      {
+        UserKey: userId,
+        "Weekly.Exist": true,
+      },
+      {
+        $set: {
+          "Weekly.PlaylistID": newWeeklyPlaylist,
+        },
+      }
+    );
 
     await Database.findOneAndUpdate(
-      { "Weekly.Exist": false },
+      {
+        UserKey: userId,
+        "Weekly.Exist": false,
+      },
       {
         $set: {
           "Weekly.Exist": true,
@@ -163,11 +180,34 @@ const WeeklyplaylistEndpoint = async (req, res) => {
       }
     );
 
-    res.status(200).send(`plyalist created and user stored`);
+    res.status(200).send(`Playlist created and songs added.`);
   } else {
-    console.log("playlist already exist ");
+    console.log("song updating");
+    const PlaylistSongs = await FetchSongs(
+      weeklyPlaylistExist.Weekly.PlaylistID,
+      50,
+      0,
+      access_token
+    );
 
-    res.status(200).send(`songs updated in playlist`);
+    const WeeklySongs = await FetchSongs(
+      weeklyPlaylistExist.Weekly.WeeklyID,
+      50,
+      0,
+      access_token
+    );
+
+    const songsToBeAdded = WeeklySongs.map((item) => {
+      const Exist = !PlaylistSongs.some((track) => track === item);
+      if (Exist) return item;
+      else return null;
+    }).filter(Boolean);
+
+    AddSongsIntoPlaylist(
+      songsToBeAdded,
+      weeklyPlaylistExist.Weekly.PlaylistID,
+      access_token
+    );
   }
 };
 
