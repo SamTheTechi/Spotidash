@@ -120,19 +120,26 @@ const WeeklyplaylistEndpoint = async (req, res) => {
   const Name = await req.body.name;
   const Description = await req.body.description;
   const weeklyPlaylistId = await req.body.weeklyPlaylistId;
-
-  weeklyExist = await Database.findOne({
+  
+  const PlaylistExist = await Database.findOne({
     UserKey: userId,
     "Weekly.Exist": false,
   });
 
-  if (weeklyExist) {
+  const weeklyPlaylistExist = await Database.findOne({
+    UserKey: userId,
+    "Weekly.PlaylistID": 
+  })
+
+
+  if (PlaylistExist || ) {
     const newWeeklyPlaylist = await Createplaylist(
       Name,
       Description,
       userId,
       access_token
     );
+    console.log(`new playlist crated of user ${userId}`);
     const PlaylistSongs = await FetchSongs(
       weeklyPlaylistId,
       50,
@@ -142,20 +149,25 @@ const WeeklyplaylistEndpoint = async (req, res) => {
 
     await AddSongsIntoPlaylist(PlaylistSongs, newWeeklyPlaylist, access_token);
 
+    console.log(weeklyPlaylistId);
+    console.log(newWeeklyPlaylist);
+
     await Database.findOneAndUpdate(
       { "Weekly.Exist": false },
       {
         $set: {
           "Weekly.Exist": true,
-          "Weekly.WeeklyID": weeklyPlaylistId[0],
-          "Weekly.PlaylistID": newWeeklyPlaylist[0],
+          "Weekly.WeeklyID": weeklyPlaylistId,
+          "Weekly.PlaylistID": newWeeklyPlaylist,
         },
       }
     );
 
-    res.status(200).send(`weekly fine ig?`);
+    res.status(200).send(`plyalist created and user stored`);
   } else {
     console.log("playlist already exist ");
+
+    res.status(200).send(`songs updated in playlist`);
   }
 };
 
@@ -164,25 +176,13 @@ const BlendplaylistEndpoint = async (req, res) => {
     (await req.body.filterlist) || `0sVi0nfDGUzItMrgUWbys0`;
   const blendPlaylist = (await req.body.blendlist) || `37i9dQZF1EJvQo3pOUilze`;
 
-  const Createplaylist = async () => {
-    try {
-      await axios.post(
-        `https://api.spotify.com/v1/users/${userId}/playlists`,
-        {
-          name: `Filterd Playlist`,
-          description: `testing one two threej`,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
-    } catch (e) {
-      throw e;
-    }
-  };
-  Createplaylist();
+  const newWeeklyPlaylist = await Createplaylist(
+    Name,
+    Description,
+    userId,
+    access_token
+  );
+
   res.status(200).send(`blend worked`);
 };
 module.exports = {

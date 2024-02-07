@@ -12,6 +12,10 @@ const UserInfo = new mongoose.Schema({
       type: Boolean,
       default: false,
     },
+    WhenCreate: {
+      type: Date,
+      default: Date.now(),
+    },
     WeeklyID: {
       type: String,
       default: null,
