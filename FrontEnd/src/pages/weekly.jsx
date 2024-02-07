@@ -5,12 +5,12 @@ const baseURL = "http://localhost:5000/api/v1/weeklyplaylist";
 
 const DiscoverWeekly = () => {
   const { userPlaylist } = useContext(PlaylistContext);
-  const [weeklyPlaylist, setWeeklyPlaylist] = useState([]);
+  const [weeklyPlaylist, setWeeklyPlaylist] = useState("");
   const [weeklyPlaylistExist, setweeklyPlaylistExist] = useState(false);
   const [NewplaylistData, setNewplaylistData] = useState({
     name: "",
     description: "",
-    weeklyPlaylistId: [],
+    weeklyPlaylistId: "",
   });
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const DiscoverWeekly = () => {
           item.name === "Discover Weekly" &&
           item.owner.display_name === `Spotify`
       )
-      .map((playlist) => playlist.id);
+      .map((playlist) => playlist.id)[0];
     setWeeklyPlaylist(weeklyPlaylistid);
     setNewplaylistData((prevData) => ({
       ...prevData,
