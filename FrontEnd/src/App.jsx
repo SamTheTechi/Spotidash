@@ -1,8 +1,7 @@
 import React from "react";
 import "./Tailwind.css";
 import Login from "./pages/login";
-import Tryagain from "./pages/signin";
-import Dashboard from "./pages/dashboard";
+import Dashboard from "./pages/Dashboard/dashboard";
 import DiscoverWeekly from "./pages/weekly";
 import FilterBlend from "./pages/blend";
 import { Route, Routes } from "react-router-dom";
@@ -14,7 +13,7 @@ const App = () => {
       <Route path="/dashboard" element={<Dashboard />}></Route>
       <Route path="/dashboard/weekly" element={<DiscoverWeekly />}></Route>
       <Route path="/dashboard/blend" element={<FilterBlend />}></Route>
-      <Route path="/tryagain" element={<Tryagain />}></Route>
+      {/* <Route path="/dashboard/blend" element={<FilterBlend />}></Route> */}
     </Routes>
   );
 };
