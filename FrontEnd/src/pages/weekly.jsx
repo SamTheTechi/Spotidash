@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { PlaylistContext } from "../context/Context";
+import { Link } from "react-router-dom";
 const baseURL = "http://localhost:5000/api/v1/weeklyplaylist";
 
 const DiscoverWeekly = () => {
@@ -59,15 +60,22 @@ const DiscoverWeekly = () => {
     return (
       <>
         <main className="bg-black h-screen w-screen text-white overflow-x box-border m-0 p-0 flex items-center justify-items-center flex-col">
-          <header className=" flex justify-start items-start h-[10%] w-[100%] p-5 overflow-hidden mb-[10vh]">
-            <img
-              src="https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png"
-              alt=""
-              className="pr-1 h-[1.6rem]"
-            />
-            <h2 className="items-center text-[1rem] font-semibold">
-              SpotiSearch
-            </h2>
+          <header className=" flex justify-between flex-row h-[10%] w-[100%] pt-10 pl-5 pr-20 overflow-hidden mb-28">
+            <div className="flex">
+              <img
+                src="https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png"
+                alt=""
+                className="pr-1 h-[1.6rem]"
+              />
+              <h2 className="items-center text-[1rem] font-semibold">
+                SpotiDash
+              </h2>
+            </div>
+            <Link to={`/dashboard`}>
+              <button className="text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[9rem] h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]">
+                Go-Back
+              </button>
+            </Link>
           </header>
           <section className=" w-[75%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[30%] flex items-center justify-center h-[55%] text-4xl">
             Songs Added!
@@ -79,15 +87,22 @@ const DiscoverWeekly = () => {
     return (
       <>
         <main className="bg-black h-screen w-screen text-white overflow-x box-border m-0 p-0 flex items-center justify-items-center flex-col">
-          <header className=" flex justify-start items-start h-[10%] w-[100%] p-5 overflow-hidden mb-[10vh]">
-            <img
-              src="https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png"
-              alt=""
-              className="pr-1 h-[1.6rem]"
-            />
-            <h2 className="items-center text-[1rem] font-semibold">
-              SpotiDash
-            </h2>
+          <header className=" flex justify-between flex-row h-[10%] w-[100%] pt-10 pl-5 pr-20 overflow-hidden mb-28">
+            <div className="flex">
+              <img
+                src="https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png"
+                alt=""
+                className="pr-1 h-[1.6rem]"
+              />
+              <h2 className="items-center text-[1rem] font-semibold">
+                SpotiDash
+              </h2>
+            </div>
+            <Link to={`/dashboard`}>
+              <button className="text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[9rem] h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]">
+                Go-Back
+              </button>
+            </Link>
           </header>
           <section className=" w-[75%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[30%] flex items-center h-[55%]">
             <form
@@ -120,7 +135,7 @@ const DiscoverWeekly = () => {
                 </label>
               </div>
               <button
-                className="text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover min-w-[18rem] aspect-[6/1] rounded-[30px] pt-[-80px] border-[5px] border-[rgba(0,0,0,0.2)]"
+                className="text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover min-w-[18rem] aspect-[6/1] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)] mb-20"
                 type="submit"
               >
                 Cleate playlist

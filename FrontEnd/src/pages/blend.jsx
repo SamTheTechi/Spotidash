@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { PlaylistContext, TokenContext } from "../context/Context";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 const baseURL = "http://localhost:5000/api/v1/blendplaylist";
 
 const FilterBlend = () => {
@@ -12,7 +12,6 @@ const FilterBlend = () => {
   const [userliked, setUserliked] = useState([]);
   const [holderColorBlend, setHolderColorBlend] = useState("");
   const [holderColorFilter, setHolderColorFilter] = useState("");
-  const history = useHistory();
   const [selectedItems, setSelectedItems] = useState({
     blendlist: [],
     filterlist: [],
@@ -30,7 +29,7 @@ const FilterBlend = () => {
 
   const onClick = (e) => {
     e.preventDefault();
-    history.goBack();
+    window.location.origin;
   };
 
   const onSubmit = () => {
@@ -118,12 +117,11 @@ const FilterBlend = () => {
               SpotiDash
             </h2>
           </div>
-          <button
-            className="text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[9rem] h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]"
-            onClick={onClick}
-          >
-            Go-Back
-          </button>
+          <Link to={`/dashboard`}>
+            <button className="text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[9rem] h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]">
+              Go-Back
+            </button>
+          </Link>
         </header>
         <section className=" w-[90%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[40%] flex justify-center flex-row h-[55%] md:h-[60%]">
           <article
