@@ -1,33 +1,34 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import axios from "axios";
 import { TokenContext } from "../../../context/Context";
 
-const TopArtist = ({ width }) => {
+const TopArtist = () => {
   const { token } = useContext(TokenContext);
   const [data, setData] = useState([]);
 
+  const Artist = useMemo(() => async () => {
+    try {
+      const response = await axios.get(
+        `https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=15`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const res = response.data.items;
+      setData(res);
+    } catch (e) {}
+  });
+
   useEffect(() => {
-    const Tracks = async () => {
-      try {
-        const response = await axios.get(
-          `https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=15`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const res = response.data.items;
-        setData(res);
-      } catch (e) {}
-    };
-    Tracks();
+    Artist();
   }, [token]);
 
   return (
     <>
       <section
-        className={`flex flex-col ml-1.5 bg-green-600 overflow-x-scroll overflow-y-auto w-[${width}%] rounded-[15px] scrollbar-hide border-[5px] border-[rgba(0,0,0,0.1)] `}
+        className={`flex flex-col ml-1.5 bg-green-600 overflow-auto w-[40%] rounded-[15px] scrollbar-hide border-[5px] border-[rgba(0,0,0,0.1)] `}
       >
         {data.map((items) => {
           let key = items.id;
@@ -62,16 +63,15 @@ const ArtistLayer = ({ imgUrl, Name, Genres, ArtistUrl }) => {
     <>
       <article
         onClick={handleClick}
-        className="p-1 pb-2 flex hover:scale-105 transition-[2s] hover:text-black"
+        className="p-1 pb-3 flex hover:scale-[1.03] hover:text-black transition duration-150 ease-in"
       >
         <img
           src={imgUrl}
           alt={Name}
-          className="aspect-square h-[64px] rounded-[8px]"
+          className="aspect-square h-[64px] rounded-[8px] shadow-customShadow hover:opacity-90 transition duration-200 ease-in"
         />
         <div className="flex flex-col p-1">
-          <div className=" text-base">{Name}</div>
-          {/* <div className="font-thin">{Genres}</div> */}
+          <d className=" text-base">{Name}</d>
         </div>
       </article>
     </>

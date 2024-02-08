@@ -8,6 +8,9 @@ export default {
         custonmGreenHover: "#169e46",
         customGray: "#121212",
       },
+      boxShadow: {
+        customShadow: "4px 4px 9px 0 rgba(0, 0, 0, 0.6)",
+      },
     },
   },
   plugins: [require("tailwind-scrollbar-hide")],
