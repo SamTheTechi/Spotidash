@@ -28,7 +28,7 @@ const Blend = () => {
           <img
             src={res}
             alt="Blends"
-            className="rounded-[15px] object-[0px,-10px] hover:scale-[1.1] hover:blur-[1px] hover:opacity-75 transition-[2s]"
+            className="rounded-[15px] hover:scale-[1.03] hover:blur-[1px] hover:opacity-75 transition duration-150 ease-in"
           />
         </Link>
       </div>

@@ -12,7 +12,6 @@ const baseURL = "http://localhost:5000/api/v1/UserId";
 const Dashboard = () => {
   const { token } = useContext(TokenContext);
   const [userID, setUserID] = useState("");
-  const [newUser, setNewUser] = useState(null);
 
   useEffect(() => {
     const userInfo = async () => {
@@ -46,18 +45,21 @@ const Dashboard = () => {
   return (
     <>
       <main className="bg-black h-screen w-screen text-white overflow-x box-border m-0 p-0 flex justify-center items-center">
-        <section className=" w-[95%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[50%] flex items-center h-[85%]">
-          <article className="w-[35%] h-[100%] grid grid-rows-3 ml-1 mt-3 mr-1">
+        <section className="w-[95%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[50%] flex items-center h-[85%] transition duration-400 ease-out">
+          <article className="w-[33%] h-[100%] grid grid-rows-3 ml-1 mt-3 mr-1">
             <Blend />
             <Weekly />
             <Search />
           </article>
 
-          <article className="w-[65%] h-[100%]">
+          <article
+            className="w-[67%] h-[100%]"
+            style={{ transition: "1s ease" }}
+          >
             <Player height={30} />
             <div className="w-[100%] h-[70%] flex">
-              <TopSongs width={65} />
-              <TopArtist width={45} />
+              <TopSongs />
+              <TopArtist />
             </div>
           </article>
         </section>

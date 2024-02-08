@@ -10,7 +10,7 @@ const Search = () => {
           <img
             src="https://daily-mix.scdn.co/covers/on_repeat/PZN_On_Repeat2_DEFAULT-en.jpg"
             alt="Discover Weekly"
-            className="rounded-[15px] object-[0px,-10px] hover:scale-[1.1] hover:blur-[1px] hover:opacity-75 transition-[2s]"
+            className="rounded-[15px] hover:scale-[1.03] hover:blur-[1px] hover:opacity-75 transition duration-150 ease-in"
           />
         </Link>
       </div>
