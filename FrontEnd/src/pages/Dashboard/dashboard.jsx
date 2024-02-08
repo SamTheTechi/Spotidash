@@ -6,7 +6,7 @@ import TopSongs from "./Component/songs";
 import TopArtist from "./Component/artist";
 import Weekly from "./Component/weekly";
 import Blend from "./Component/blend";
-import Deepsearch from "./Component/search";
+import Search from "./Component/search";
 const baseURL = "http://localhost:5000/api/v1/UserId";
 
 const Dashboard = () => {
@@ -50,7 +50,7 @@ const Dashboard = () => {
           <article className="w-[35%] h-[100%] grid grid-rows-3 ml-1 mt-3 mr-1">
             <Blend />
             <Weekly />
-            <Deepsearch />
+            <Search />
           </article>
 
           <article className="w-[65%] h-[100%]">

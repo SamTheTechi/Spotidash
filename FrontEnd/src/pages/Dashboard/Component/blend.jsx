@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import { PlaylistContext } from "../../../context/Context";
 
 const Blend = () => {
@@ -15,12 +16,6 @@ const Blend = () => {
     setblendPlaylist(blends);
   }, [userPlaylist]);
 
-  const handleClick = (e) => {
-    e.preventDefault();
-
-    window.location.pathname = "dashboard/blend";
-  };
-
   let res =
     blendPlaylist.images && blendPlaylist.images.length > 0
       ? blendPlaylist.images[0].url
@@ -28,15 +23,14 @@ const Blend = () => {
 
   return (
     <>
-      <div
-        onClick={handleClick}
-        className="border-[5px] border-[rgba(0,0,0,0.1)] rounded-[15px]  flex justify-center items-center overflow-hidden m-1.5 bg-yellow-500"
-      >
-        <img
-          src={res}
-          alt="Blends"
-          className="rounded-[15px] object-[0px,-10px] hover:scale-[1.1] hover:blur-[1px] hover:opacity-75 transition-[2s]"
-        />
+      <div className="border-[5px] border-[rgba(0,0,0,0.1)] rounded-[15px]  flex justify-center items-center overflow-hidden m-1.5 bg-yellow-500">
+        <Link to={`blend`}>
+          <img
+            src={res}
+            alt="Blends"
+            className="rounded-[15px] object-[0px,-10px] hover:scale-[1.1] hover:blur-[1px] hover:opacity-75 transition-[2s]"
+          />
+        </Link>
       </div>
     </>
   );

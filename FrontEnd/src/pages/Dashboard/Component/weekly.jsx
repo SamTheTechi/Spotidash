@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { PlaylistContext } from "../../../context/Context";
+import { Link } from "react-router-dom";
 
 const Weekly = () => {
   const { userPlaylist } = useContext(PlaylistContext);
@@ -15,12 +16,6 @@ const Weekly = () => {
     setWeeklyPlaylist(weeklyPlaylistId);
   }, [userPlaylist]);
 
-  const handleClick = (e) => {
-    e.preventDefault();
-
-    window.location.pathname = "dashboard/weekly";
-  };
-
   let res =
     weeklyPlaylist.images && weeklyPlaylist.images.length > 0
       ? weeklyPlaylist.images[0].url
@@ -28,15 +23,14 @@ const Weekly = () => {
 
   return (
     <>
-      <div
-        onClick={handleClick}
-        className="border-[5px] border-[rgba(0,0,0,0.1)] rounded-[15px]  flex justify-center items-center overflow-hidden m-1.5 bg-pink-400"
-      >
-        <img
-          src={res}
-          alt="Discover Weekly"
-          className="rounded-[15px] object-[0px,-10px] hover:scale-[1.1] hover:blur-[1px] hover:opacity-75 transition-[2s]"
-        />
+      <div className="border-[5px] border-[rgba(0,0,0,0.1)] rounded-[15px]  flex justify-center items-center overflow-hidden m-1.5 bg-pink-400">
+        <Link to={`weekly`}>
+          <img
+            src={res}
+            alt="Discover Weekly"
+            className="rounded-[15px] object-[0px,-10px] hover:scale-[1.1] hover:blur-[1px] hover:opacity-75 transition-[2s]"
+          />
+        </Link>
       </div>
     </>
   );
