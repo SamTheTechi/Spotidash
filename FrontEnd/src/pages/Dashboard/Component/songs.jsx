@@ -79,7 +79,7 @@ const SongLayer = ({ imgUrl, Name, Artist, PreviewUrl }) => {
           alt={Name}
           className=" aspect-square h-[64px] rounded-[8px] shadow-customShadow hover:opacity-90 transition duration-200 ease-in"
         />
-        <div className="flex flex-col p-1 justify-around">
+        <div className="flex flex-col p-1 pl-2 justify-around">
           <div className=" text-base">{Name}</div>
           <div className="font-thin text-xs">{Artist}</div>
         </div>

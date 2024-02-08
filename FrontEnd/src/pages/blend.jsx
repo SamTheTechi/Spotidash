@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useMemo } from "react";
 import axios from "axios";
 import { PlaylistContext, TokenContext } from "../context/Context";
 import { Link } from "react-router-dom";
@@ -9,28 +9,11 @@ const FilterBlend = () => {
   const { userPlaylist } = useContext(PlaylistContext);
   const [selectedBlends, setSelectedBlends] = useState([]);
   const [seletedFilter, setSeletedFilter] = useState([]);
-  const [userliked, setUserliked] = useState([]);
-  const [holderColorBlend, setHolderColorBlend] = useState("");
-  const [holderColorFilter, setHolderColorFilter] = useState("");
+  // const [userliked, setUserliked] = useState([]);
   const [selectedItems, setSelectedItems] = useState({
     blendlist: [],
     filterlist: [],
   });
-
-  const Colors = [
-    `rgb(192,255,69)`,
-    `rgb(152,63,244)`,
-    `rgb(246,60,202)`,
-    `rgb(189,35,97)`,
-    `rgb(233,128,26)`,
-    `rgb(248,218,5)`,
-    `rgb(110,30,110)`,
-  ];
-
-  const onClick = (e) => {
-    e.preventDefault();
-    window.location.origin;
-  };
 
   const onSubmit = () => {
     e.preventDefault();
@@ -50,38 +33,32 @@ const FilterBlend = () => {
     }, 500);
   };
 
-  useEffect(() => {
-    const getLikedsongs = async () => {
-      try {
-        let offset = 0;
-        var allLikedTracks = [];
-        do {
-          var response = await axios.get(
-            `https://api.spotify.com/v1/me/tracks?limit=50&offset=${offset}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          const tracks = response.data.items.map((item) => item.track.url);
-          allLikedTracks = allLikedTracks.concat(response);
-          offset += 50;
-        } while (offset < response.data.total);
-      } catch (e) {
-        throw e;
-      }
-      setUserliked((prevLiked) => [...prevLiked, ...allLikedTracks]);
-      console.log(userliked);
-    };
-    getLikedsongs();
-  }, [token]);
-
-  useEffect(() => {
-    let getColor = () => Colors[Math.floor(Math.random() * Colors.length)];
-    setHolderColorBlend(getColor());
-    setHolderColorFilter(getColor());
-  }, [userPlaylist]);
+  // useEffect(() => {
+  //   getLikedsongs();
+  // }, [token]);
+  // const getLikedsongs = useMemo(() => async () => {
+  //   try {
+  //     let offset = 0;
+  //     var allLikedTracks = [];
+  //     do {
+  //       var response = await axios.get(
+  //         `https://api.spotify.com/v1/me/tracks?limit=50&offset=${offset}`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+  //       const tracks = response.data.items.map((item) => item.track.url);
+  //       allLikedTracks = allLikedTracks.concat(response);
+  //       offset += 50;
+  //     } while (offset < response.data.total);
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  //   setUserliked((prevLiked) => [...prevLiked, ...allLikedTracks]);
+  //   console.log(userliked);
+  // });
 
   useEffect(() => {
     const blendIds = userPlaylist.filter(
@@ -106,7 +83,7 @@ const FilterBlend = () => {
   return (
     <>
       <main className="bg-black h-screen w-screen text-white overflow-x box-border m-0 p-0 flex items-center justify-items-center flex-col">
-        <header className=" flex justify-between flex-row h-[10%] w-[100%] pt-10 pl-5 pr-20 overflow-hidden mb-5">
+        <header className=" flex justify-between flex-row h-[10%] w-[100%] pt-10 pl-5 pr-20 overflow-hidden mb-16">
           <div className="flex">
             <img
               src="https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png"
@@ -123,9 +100,10 @@ const FilterBlend = () => {
             </button>
           </Link>
         </header>
+
         <section className=" w-[90%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[40%] flex justify-center flex-row h-[55%] md:h-[60%]">
           <article
-            className={`bg-[${holderColorBlend}] bg-yellow-600 p-2 h-[100%] w-[50%] rounded-[15px] mr-2 overflow-auto scrollbar-hide border-[5px] border-[rgba(0,0,0,0.2)] scrollbar-thumb-gray-500`}
+            className={` bg-purple-900 p-2 h-[100%] w-[50%] rounded-[15px] mr-2 overflow-auto scrollbar-hide border-[5px] border-[rgba(0,0,0,0.2)] scrollbar-thumb-gray-500`}
             style={{ scrollbarWidth: "thin" }}
           >
             <form>
@@ -138,13 +116,15 @@ const FilterBlend = () => {
                     key={Key}
                     playlistImage={imgUrl}
                     playlistName={Name}
+                    playlistIds={Key}
+                    setSelectedItems={setSelectedItems.blendlist}
                   />
                 );
               })}
             </form>
           </article>
           <article
-            className={`bg-[${holderColorFilter}] bg-pink-600 p-2 h-[100%] w-[50%] rounded-[15px] mr-2 overflow-auto scrollbar-hide border-[5px] border-[rgba(0,0,0,0.2)] scrollbar-thumb-black`}
+            className={` bg-pink-700 p-2 h-[100%] w-[50%] rounded-[15px] mr-2 overflow-auto scrollbar-hide border-[5px] border-[rgba(0,0,0,0.2)] scrollbar-thumb-black`}
           >
             <form>
               {/* <SelectPlatlist key={} playlistImage={} playlistName={}/> */}
@@ -157,6 +137,8 @@ const FilterBlend = () => {
                     key={Key}
                     playlistImage={imgUrl}
                     playlistName={Name}
+                    playlistIds={Key}
+                    setSelectedItems={setSelectedItems.filterlist}
                   />
                 );
               })}
@@ -174,10 +156,25 @@ const FilterBlend = () => {
   );
 };
 
-const SelectPlatlist = ({ playlistName, playlistImage }) => {
+const SelectPlatlist = ({
+  playlistName,
+  playlistImage,
+  playlistIds,
+  setSelectedItems,
+}) => {
   const [cheakBox, setCheakBox] = useState(false);
-  const handleSwitch = () => {
+  const [playlistId, setPlaylistId] = useState(playlistIds);
+
+  const handleSwitch = (e) => {
     setCheakBox(!cheakBox);
+    setPlaylistId(cheakBox ? e.target.id : null);
+
+    if (
+      playlistId != null ||
+      setSelectedItems.some((item) => item === e.target.id)
+    ) {
+      setSelectedItems.push(playlistId);
+    }
   };
 
   return (
@@ -188,19 +185,19 @@ const SelectPlatlist = ({ playlistName, playlistImage }) => {
             ? `border-custonmGreenHover bg-[rgba(0,0,0,0.2)]`
             : ` border-custonmGreen bg-[rgba(256,256,256,0.2)]`
         } 
-       border-4 rounded-[12px] mb-2 `}
+        border-4 rounded-[12px] mb-2 `}
       >
         <img
           src={playlistImage}
           alt={playlistName}
-          className="h-[3.5rem] md:h-[3rem] w-[3.5rem] md:w-[3rem] rounded-[8px] pr-1"
+          className="h-[3.5rem] md:h-[3rem] w-[3.5rem] md:w-[3rem] rounded-[8px] shadow-customShadow"
         />
-        <h4>{playlistName}</h4>
+        <h4 className="pl-1.5">{playlistName}</h4>
         <input
           type="checkbox"
-          id={`checkbox-${playlistName}`}
+          id={playlistIds}
           checked={cheakBox}
-          onClick={handleSwitch}
+          onChange={handleSwitch}
           className="hidden"
         />
       </label>
@@ -209,3 +206,20 @@ const SelectPlatlist = ({ playlistName, playlistImage }) => {
 };
 
 export default FilterBlend;
+
+// const [holderColorBlend, setHolderColorBlend] = useState("");
+// const [holderColorFilter, setHolderColorFilter] = useState("");
+// useEffect(() => {
+//   let getColor = () => Colors[Math.floor(Math.random() * Colors.length)];
+//   setHolderColorBlend(getColor());
+//   setHolderColorFilter(getColor());
+// }, [userPlaylist]);
+// const Colors = [
+//   `rgb(192,255,69)`,
+//   `rgb(152,63,244)`,
+//   `rgb(246,60,202)`,
+//   `rgb(189,35,97)`,
+//   `rgb(233,128,26)`,
+//   `rgb(248,218,5)`,
+//   `rgb(110,30,110)`,
+// ];
