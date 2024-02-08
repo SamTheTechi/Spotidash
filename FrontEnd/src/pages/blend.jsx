@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { PlaylistContext, TokenContext } from "../context/Context";
+import { useHistory } from "react-router-dom";
 const baseURL = "http://localhost:5000/api/v1/blendplaylist";
 
 const FilterBlend = () => {
@@ -11,6 +12,7 @@ const FilterBlend = () => {
   const [userliked, setUserliked] = useState([]);
   const [holderColorBlend, setHolderColorBlend] = useState("");
   const [holderColorFilter, setHolderColorFilter] = useState("");
+  const history = useHistory();
   const [selectedItems, setSelectedItems] = useState({
     blendlist: [],
     filterlist: [],
@@ -25,6 +27,11 @@ const FilterBlend = () => {
     `rgb(248,218,5)`,
     `rgb(110,30,110)`,
   ];
+
+  const onClick = (e) => {
+    e.preventDefault();
+    history.goBack();
+  };
 
   const onSubmit = () => {
     e.preventDefault();
@@ -100,16 +107,25 @@ const FilterBlend = () => {
   return (
     <>
       <main className="bg-black h-screen w-screen text-white overflow-x box-border m-0 p-0 flex items-center justify-items-center flex-col">
-        <header className=" flex justify-start items-start h-[10%] w-[100%] p-5 overflow-hidden mb-[6vh]">
-          <img
-            src="https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png"
-            alt=""
-            className="pr-1 h-[1.6rem]"
-          />
-          <h2 className="items-center text-[1rem] font-semibold">SpotiDash</h2>
+        <header className=" flex justify-between flex-row h-[10%] w-[100%] pt-10 pl-5 pr-20 overflow-hidden mb-5">
+          <div className="flex">
+            <img
+              src="https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png"
+              alt=""
+              className="pr-1 h-[1.6rem]"
+            />
+            <h2 className="items-center text-[1rem] font-semibold">
+              SpotiDash
+            </h2>
+          </div>
+          <button
+            className="text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[9rem] h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]"
+            onClick={onClick}
+          >
+            Go-Back
+          </button>
         </header>
-        <section></section>
-        <section className=" w-[90%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[40%] flex justify-center flex-row h-[55%] md:h-[65%]">
+        <section className=" w-[90%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[40%] flex justify-center flex-row h-[55%] md:h-[60%]">
           <article
             className={`bg-[${holderColorBlend}] bg-yellow-600 p-2 h-[100%] w-[50%] rounded-[15px] mr-2 overflow-auto scrollbar-hide border-[5px] border-[rgba(0,0,0,0.2)] scrollbar-thumb-gray-500`}
             style={{ scrollbarWidth: "thin" }}

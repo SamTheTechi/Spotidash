@@ -43,15 +43,6 @@ const Dashboard = () => {
     newUser();
   }, [userID]);
 
-  useEffect(() => {
-    const sendUserID = async () => {
-      try {
-        const sendID = await axios.post();
-      } catch (e) {
-        throw e;
-      }
-    };
-  }, []);
   return (
     <>
       <main className="bg-black h-screen w-screen text-white overflow-x box-border m-0 p-0 flex justify-center items-center">
