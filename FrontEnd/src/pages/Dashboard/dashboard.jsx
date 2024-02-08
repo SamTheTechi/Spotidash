@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { TokenContext } from "../context/Context";
-import Player from "./dasComp/player";
-import TopSongs from "./dasComp/topsongs";
-import TopArtist from "./dasComp/topartist";
-import Weekly from "./dasComp/weekly";
-import Blend from "./dasComp/blend";
-import Deepsearch from "./dasComp/deepsearch";
+import { TokenContext } from "../../context/Context";
+import Player from "./Component/player";
+import TopSongs from "./Component/songs";
+import TopArtist from "./Component/artist";
+import Weekly from "./Component/weekly";
+import Blend from "./Component/blend";
+import Deepsearch from "./Component/search";
 const baseURL = "http://localhost:5000/api/v1/UserId";
 
 const Dashboard = () => {

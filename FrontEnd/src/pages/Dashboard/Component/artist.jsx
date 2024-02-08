@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { TokenContext } from "../../context/Context";
+import { TokenContext } from "../../../context/Context";
 
 const TopArtist = ({ width }) => {
   const { token } = useContext(TokenContext);

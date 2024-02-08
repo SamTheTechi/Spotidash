@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { PlaylistContext } from "../../context/Context";
+import { PlaylistContext } from "../../../context/Context";
 
 const Blend = () => {
   const { userPlaylist } = useContext(PlaylistContext);

@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import { TokenContext } from "../../context/Context";
+import { TokenContext } from "../../../context/Context";
 
 const Player = ({ height }) => {
   const [songs, setSongs] = useState(``);

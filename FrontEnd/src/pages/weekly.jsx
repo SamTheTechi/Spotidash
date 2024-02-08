@@ -86,7 +86,7 @@ const DiscoverWeekly = () => {
               className="pr-1 h-[1.6rem]"
             />
             <h2 className="items-center text-[1rem] font-semibold">
-              SpotiSearch
+              SpotiDash
             </h2>
           </header>
           <section className=" w-[75%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[30%] flex items-center h-[55%]">
