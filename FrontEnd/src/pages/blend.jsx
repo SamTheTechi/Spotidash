@@ -106,10 +106,9 @@ const FilterBlend = () => {
             alt=""
             className="pr-1 h-[1.6rem]"
           />
-          <h2 className="items-center text-[1rem] font-semibold">
-            SpotiSearch
-          </h2>
+          <h2 className="items-center text-[1rem] font-semibold">SpotiDash</h2>
         </header>
+        <section></section>
         <section className=" w-[90%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[40%] flex justify-center flex-row h-[55%] md:h-[65%]">
           <article
             className={`bg-[${holderColorBlend}] bg-yellow-600 p-2 h-[100%] w-[50%] rounded-[15px] mr-2 overflow-auto scrollbar-hide border-[5px] border-[rgba(0,0,0,0.2)] scrollbar-thumb-gray-500`}
