@@ -1,7 +1,6 @@
 require(`dotenv`).config();
 
 const querystring = require("querystring");
-const mongoose = require(`mongoose`);
 const axios = require(`axios`);
 const Database = require(`../model/User`);
 const {
@@ -89,7 +88,7 @@ const callback = async (req, res) => {
       );
       access_token = response.data.access_token;
       res.status(200).redirect(redirect_dashboard);
-      console.log({ token: access_token });
+      console.log(`Access_token Recived`);
     } catch (e) {
       console.error(e);
       res.status(500).res.response(redirect_tryagain);
@@ -104,11 +103,42 @@ const tokenEndpoint = async (req, res) => {
 const UserIdEndpoint = async (req, res) => {
   const receivedData = await req.body.id;
   userId = receivedData;
+
   try {
-    const IsUserPresent = await Database.findOne({ UserKey: userId });
-    if (!IsUserPresent) {
+    const weeklyPlaylistExist = await Database.findOne({ UserKey: userId });
+    if (!weeklyPlaylistExist) {
       await Database.create({ UserKey: userId });
       console.log(`user created`);
+    } else if (
+      weeklyPlaylistExist &&
+      weeklyPlaylistExist.Weekly.Exist === true
+    ) {
+      const PlaylistSongs = await FetchSongs(
+        weeklyPlaylistExist.Weekly.PlaylistID,
+        50,
+        0,
+        access_token
+      );
+
+      const WeeklySongs = await FetchSongs(
+        weeklyPlaylistExist.Weekly.WeeklyID,
+        50,
+        0,
+        access_token
+      );
+
+      const songsToBeAdded = WeeklySongs.map((item) => {
+        const Exist = !PlaylistSongs.some((track) => track === item);
+        if (Exist) return item;
+        else return null;
+      }).filter(Boolean);
+
+      AddSongsIntoPlaylist(
+        songsToBeAdded,
+        weeklyPlaylistExist.Weekly.PlaylistID,
+        access_token
+      );
+      console.log(`updateting songs`);
     }
   } catch (e) {
     return;
@@ -117,114 +147,146 @@ const UserIdEndpoint = async (req, res) => {
 };
 
 const WeeklyplaylistEndpoint = async (req, res) => {
-  const Name = await req.body.name;
-  const Description = await req.body.description;
-  const weeklyPlaylistId = await req.body.weeklyPlaylistId;
+  try {
+    const Name = await req.body.name;
+    const Description = await req.body.description;
+    const weeklyPlaylistId = await req.body.weeklyPlaylistId;
 
-  const PlaylistExist = await Database.findOne({
-    UserKey: userId,
-    "Weekly.Exist": false,
-  });
+    const PlaylistExist = await Database.findOne({
+      UserKey: userId,
+      "Weekly.Exist": false,
+    });
 
-  const weeklyPlaylistExist = await Database.findOne({
-    UserKey: userId,
-    "Weekly.Exist": true,
-  });
+    const weeklyPlaylistExist = await Database.findOne({
+      UserKey: userId,
+      "Weekly.Exist": true,
+    });
 
-  const val = await FetchAllUserPlaylist(access_token);
-  const data = await val
-    .filter((items) => items.id === weeklyPlaylistExist.Weekly.PlaylistID)
-    .map((item) => item.id)[0];
+    const val = await FetchAllUserPlaylist(access_token);
+    const PlaylistExistID = await val
+      .filter((items) => items.id === weeklyPlaylistExist?.Weekly.PlaylistID)
+      .map((item) => item.id)[0];
 
-  if (PlaylistExist || !data) {
-    const newWeeklyPlaylist = await Createplaylist(
-      Name,
-      Description,
-      userId,
-      access_token
-    );
-    console.log(`new playlist created for user ${userId}`);
+    if (PlaylistExist || !PlaylistExistID) {
+      const newWeeklyPlaylist = await Createplaylist(
+        Name,
+        Description,
+        userId,
+        access_token
+      );
+      console.log(`new playlist created for user ${userId}`);
 
-    const PlaylistSongs = await FetchSongs(
-      weeklyPlaylistId,
-      50,
-      0,
-      access_token
-    );
+      const PlaylistSongs = await FetchSongs(
+        weeklyPlaylistId,
+        50,
+        0,
+        access_token
+      );
 
-    await AddSongsIntoPlaylist(PlaylistSongs, newWeeklyPlaylist, access_token);
-
-    await Database.findOneAndUpdate(
-      {
-        UserKey: userId,
-        "Weekly.Exist": true,
-      },
-      {
-        $set: {
-          "Weekly.PlaylistID": newWeeklyPlaylist,
-        },
-      }
-    );
-
-    await Database.findOneAndUpdate(
-      {
-        UserKey: userId,
-        "Weekly.Exist": false,
-      },
-      {
-        $set: {
+      await Database.findOneAndUpdate(
+        {
+          UserKey: userId,
           "Weekly.Exist": true,
-          "Weekly.WeeklyID": weeklyPlaylistId,
-          "Weekly.PlaylistID": newWeeklyPlaylist,
         },
-      }
-    );
+        {
+          $set: {
+            "Weekly.PlaylistID": newWeeklyPlaylist,
+          },
+        }
+      );
 
-    res.status(200).send(`Playlist created and songs added.`);
-  } else {
-    console.log("song updating");
-    const PlaylistSongs = await FetchSongs(
-      weeklyPlaylistExist.Weekly.PlaylistID,
-      50,
-      0,
-      access_token
-    );
+      await Database.findOneAndUpdate(
+        {
+          UserKey: userId,
+          "Weekly.Exist": false,
+        },
+        {
+          $set: {
+            "Weekly.Exist": true,
+            "Weekly.WeeklyID": weeklyPlaylistId,
+            "Weekly.PlaylistID": newWeeklyPlaylist,
+          },
+        }
+      );
 
-    const WeeklySongs = await FetchSongs(
-      weeklyPlaylistExist.Weekly.WeeklyID,
-      50,
-      0,
-      access_token
-    );
+      await AddSongsIntoPlaylist(
+        PlaylistSongs,
+        newWeeklyPlaylist,
+        access_token
+      );
 
-    const songsToBeAdded = WeeklySongs.map((item) => {
-      const Exist = !PlaylistSongs.some((track) => track === item);
-      if (Exist) return item;
-      else return null;
-    }).filter(Boolean);
-
-    AddSongsIntoPlaylist(
-      songsToBeAdded,
-      weeklyPlaylistExist.Weekly.PlaylistID,
-      access_token
-    );
+      res.status(200).send(`Playlist created and songs added.`);
+    }
+  } catch (e) {
+    throw e;
   }
 };
 
 const BlendplaylistEndpoint = async (req, res) => {
-  const filterPlaylist =
-    (await req.body.filterlist) || `0sVi0nfDGUzItMrgUWbys0`;
-  const blendPlaylist = (await req.body.blendlist) || `37i9dQZF1EJvQo3pOUilze`;
+  try {
+    const blendPlaylist = await req.body.blendlist;
+    const filterPlaylist = await req.body.filterlist;
+    let filterPlaylistSongs = [];
+    let blendPlaylistSongs = [];
 
-  const newWeeklyPlaylist = await Createplaylist(
-    Name,
-    Description,
-    userId,
-    access_token
-  );
+    const Data = await Database.findOne({
+      UserKey: userId,
+    });
 
-  res.status(200).send(`blend worked`);
+    const currenDate = new Date();
+    ISTtime = currenDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+
+    const newBlendPlaylist = await Createplaylist(
+      `Filtered_blend created at ${ISTtime}`,
+      `your selected blends, you can change info as you want`,
+      userId,
+      access_token
+    );
+
+    await Database.findOneAndUpdate(
+      {
+        UserKey: userId,
+      },
+      {
+        $push: {
+          Blend: {
+            selectedBlends: blendPlaylist,
+            selectedFilter: filterPlaylist,
+            PlaylistID: newBlendPlaylist,
+          },
+        },
+      }
+    );
+
+    try {
+      for (let item of blendPlaylist) {
+        const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
+        blendPlaylistSongs = blendPlaylistSongs.concat(PlaylistSongs);
+      }
+      for (let item of filterPlaylist) {
+        const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
+        filterPlaylistSongs = filterPlaylistSongs.concat(PlaylistSongs);
+      }
+    } catch (e) {
+      console.log(`error while fetching songs`);
+    }
+
+    const songsToBeAdded = blendPlaylistSongs
+      .map((item) => {
+        const Exist = !filterPlaylistSongs.some((tracks) => tracks === item);
+        if (Exist) return item;
+        else return null;
+      })
+      .filter(Boolean);
+
+    AddSongsIntoPlaylist(songsToBeAdded, newBlendPlaylist, access_token);
+
+    res.status(200).send(`woking?`);
+  } catch (e) {
+    throw e;
+  }
 };
+
 module.exports = {
   login,
   callback,

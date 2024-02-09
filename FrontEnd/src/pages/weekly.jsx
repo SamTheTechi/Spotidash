@@ -87,7 +87,7 @@ const DiscoverWeekly = () => {
     return (
       <>
         <main className="bg-black h-screen w-screen text-white overflow-x box-border m-0 p-0 flex items-center justify-items-center flex-col">
-          <header className=" flex justify-between flex-row h-[10%] w-[100%] pt-10 pl-5 pr-20 overflow-hidden mb-28">
+          <header className=" flex justify-between flex-row h-[10%] w-[100%] pt-10 pl-5 pr-20 overflow-hidden mb-32">
             <div className="flex">
               <img
                 src="https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png"
@@ -104,7 +104,7 @@ const DiscoverWeekly = () => {
               </button>
             </Link>
           </header>
-          <section className=" w-[75%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[30%] flex items-center h-[55%]">
+          <section className=" w-[75%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[30%] flex items-center h-[45%] bg-gray-900 border-2 border-gray-800 rounded-[15px] ">
             <form
               onSubmit={handleSubmit}
               className="flex h-[100%] w-[100%] justify-around items-center flex-col"
@@ -135,7 +135,7 @@ const DiscoverWeekly = () => {
                 </label>
               </div>
               <button
-                className="text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover min-w-[18rem] aspect-[6/1] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)] mb-20"
+                className="text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover min-w-[18rem] aspect-[6/1] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)] mb-5"
                 type="submit"
               >
                 Cleate playlist

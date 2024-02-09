@@ -12,17 +12,17 @@ const UserInfo = new mongoose.Schema({
       type: Boolean,
       default: false,
     },
-    WhenCreate: {
-      type: Date,
-      default: Date.now(),
-    },
     WeeklyID: {
       type: String,
-      default: "NO ID yet",
+      default: null,
     },
     PlaylistID: {
       type: String,
-      default: "NO ID yet",
+      default: null,
+    },
+    WhenCreate: {
+      type: Date,
+      default: Date.now(),
     },
   },
 
@@ -43,6 +43,10 @@ const UserInfo = new mongoose.Schema({
       PlaylistID: {
         type: String,
         default: null,
+      },
+      WhenCreate: {
+        type: Date,
+        default: Date.now(),
       },
     },
   ],
