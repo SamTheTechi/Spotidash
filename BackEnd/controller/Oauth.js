@@ -89,7 +89,7 @@ const callback = async (req, res) => {
       );
       access_token = response.data.access_token;
       res.status(200).redirect(redirect_dashboard);
-      console.log({ token: access_token });
+      console.log(`Access_token Recived`);
     } catch (e) {
       console.error(e);
       res.status(500).res.response(redirect_tryagain);
@@ -212,19 +212,44 @@ const WeeklyplaylistEndpoint = async (req, res) => {
 };
 
 const BlendplaylistEndpoint = async (req, res) => {
-  const filterPlaylist =
-    (await req.body.filterlist) || `0sVi0nfDGUzItMrgUWbys0`;
-  const blendPlaylist = (await req.body.blendlist) || `37i9dQZF1EJvQo3pOUilze`;
+  const filterPlaylist = await req.body.filterlist;
+  const blendPlaylist = await req.body.blendlist;
+  let filterPlaylistSongs = [];
+  let blendPlaylistSongs = [];
 
-  const newWeeklyPlaylist = await Createplaylist(
-    Name,
-    Description,
+  const newBlendPlaylsit = await Createplaylist(
+    `blend`,
+    `newBlend`,
     userId,
     access_token
   );
 
-  res.status(200).send(`blend worked`);
+  try {
+    for (let item of blendPlaylist) {
+      const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
+      blendPlaylistSongs = blendPlaylistSongs.concat(PlaylistSongs);
+    }
+    for (let item of filterPlaylist) {
+      const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
+      filterPlaylistSongs = filterPlaylistSongs.concat(PlaylistSongs);
+    }
+  } catch (e) {
+    console.log(`error while fetching songs`);
+  }
+
+  const songsToBeAdded = blendPlaylistSongs
+    .map((item) => {
+      const Exist = !filterPlaylistSongs.some((tracks) => tracks === item);
+      if (Exist) return item;
+      else return null;
+    })
+    .filter(Boolean);
+
+  AddSongsIntoPlaylist(songsToBeAdded, newBlendPlaylsit, access_token);
+
+  res.status(200).send(`woking?`);
 };
+
 module.exports = {
   login,
   callback,

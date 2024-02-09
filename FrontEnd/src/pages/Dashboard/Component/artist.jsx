@@ -63,15 +63,15 @@ const ArtistLayer = ({ imgUrl, Name, Genres, ArtistUrl }) => {
     <>
       <article
         onClick={handleClick}
-        className="p-1 pb-3 flex hover:scale-[1.03] hover:text-black transition duration-150 ease-in"
+        className="p-1 pb-3 flex hover:scale-[1.03] hover:text-black hover:underline transition duration-150 ease-in cursor-pointer"
       >
         <img
           src={imgUrl}
           alt={Name}
           className="aspect-square h-[64px] rounded-[8px] shadow-customShadow hover:opacity-90 transition duration-200 ease-in"
         />
-        <div className="flex flex-col p-1 pl-2">
-          <d className=" text-base">{Name}</d>
+        <div className="flex flex-col p-1 pl-2 justify-around">
+          <div className=" text-base mb-2 ">{Name}</div>
         </div>
       </article>
     </>

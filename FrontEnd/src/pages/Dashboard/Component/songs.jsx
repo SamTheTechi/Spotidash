@@ -71,7 +71,7 @@ const SongLayer = ({ imgUrl, Name, Artist, PreviewUrl }) => {
     <>
       <article
         onClick={handlePreviewSong}
-        className="p-1.5 pb-3 flex hover:scale-[1.03] hover:text-black transition duration-150 ease-in"
+        className="p-1.5 pb-3 flex hover:scale-[1.03] hover:text-black  transition duration-150 ease-in cursor-pointer"
       >
         <audio ref={audioRef} src={PreviewUrl}></audio>
         <img
