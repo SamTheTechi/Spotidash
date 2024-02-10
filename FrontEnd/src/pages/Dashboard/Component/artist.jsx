@@ -27,7 +27,7 @@ const TopArtist = () => {
 
   return (
     <>
-      <section
+      <div
         className={`flex flex-col ml-1.5 bg-green-600 overflow-auto w-[40%] rounded-[15px] scrollbar-hide border-[5px] border-[rgba(0,0,0,0.1)] `}
       >
         {data.map((items) => {
@@ -49,7 +49,7 @@ const TopArtist = () => {
             />
           );
         })}
-      </section>
+      </div>
     </>
   );
 };
