@@ -44,6 +44,10 @@ const UserInfo = new mongoose.Schema({
         type: String,
         default: null,
       },
+      WhenCreate: {
+        type: Date,
+        default: Date.now(),
+      },
     },
   ],
   Date: {

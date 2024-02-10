@@ -219,9 +219,18 @@ const BlendplaylistEndpoint = async (req, res) => {
   let filterPlaylistSongs = [];
   let blendPlaylistSongs = [];
 
+  const Data = await Database.findOne({
+    UserKey: userId,
+  });
+
+  const currenDate = new Date();
+  // currenDate.setHours(currenDate.getHours() + 5);
+  // currenDate.setMinutes(currenDate.getMinutes() + 30);
+  ISTtime = currenDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+
   const newBlendPlaylsit = await Createplaylist(
-    `blend`,
-    `newBlend`,
+    `Filtered_blend created at ${ISTtime}`,
+    `your selected blends, you can change info as you want`,
     userId,
     access_token
   );
