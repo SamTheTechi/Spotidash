@@ -103,42 +103,79 @@ const tokenEndpoint = async (req, res) => {
 const UserIdEndpoint = async (req, res) => {
   const receivedData = await req.body.id;
   userId = receivedData;
-
   try {
-    const weeklyPlaylistExist = await Database.findOne({ UserKey: userId });
-    if (!weeklyPlaylistExist) {
+    const PlaylistExist = await Database.findOne({ UserKey: userId });
+    if (!PlaylistExist) {
       await Database.create({ UserKey: userId });
       console.log(`user created`);
-    } else if (
-      weeklyPlaylistExist &&
-      weeklyPlaylistExist.Weekly.Exist === true
-    ) {
+    }
+    if (PlaylistExist && PlaylistExist.Weekly.Exist === true) {
       const PlaylistSongs = await FetchSongs(
-        weeklyPlaylistExist.Weekly.PlaylistID,
+        PlaylistExist.Weekly.PlaylistID,
         50,
         0,
         access_token
       );
-
       const WeeklySongs = await FetchSongs(
-        weeklyPlaylistExist.Weekly.WeeklyID,
+        PlaylistExist.Weekly.WeeklyID,
         50,
         0,
         access_token
       );
-
       const songsToBeAdded = WeeklySongs.map((item) => {
         const Exist = !PlaylistSongs.some((track) => track === item);
         if (Exist) return item;
         else return null;
       }).filter(Boolean);
-
       AddSongsIntoPlaylist(
         songsToBeAdded,
-        weeklyPlaylistExist.Weekly.PlaylistID,
+        PlaylistExist.Weekly.PlaylistID,
         access_token
       );
-      console.log(`updateting songs`);
+      console.log(`weekly updated`);
+    }
+    if (PlaylistExist && PlaylistExist.Blend !== null) {
+      const val = await FetchAllUserPlaylist(access_token);
+      const blendPlaylistIDs = PlaylistExist.Blend.map(
+        (item) => item.PlaylistID
+      );
+      const yoi = val
+        .map((item) => item.id)
+        .filter((item) => blendPlaylistIDs.includes(item));
+
+      console.log(yoi);
+      console.log(blendPlaylistIDs);
+
+      //     for (let items of PlaylistExist.Blend) {
+      //       let filterPlaylistSongs = [];
+      //       let blendPlaylistSongs = [];
+      //       try {
+      //         for (let item of items.selectedBlends) {
+      //           const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
+      //           blendPlaylistSongs = blendPlaylistSongs.concat(PlaylistSongs);
+      //         }
+      //         for (let item of items.selectedFilter) {
+      //           const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
+      //           filterPlaylistSongs = filterPlaylistSongs.concat(PlaylistSongs);
+      //         }
+      //       } catch (e) {
+      //         console.log(`error while fetching songs`);
+      //       }
+
+      //       const songsToBeAdded = blendPlaylistSongs
+      //         .map((item) => {
+      //           const Exist = !filterPlaylistSongs.some(
+      //             (tracks) => tracks === item
+      //           );
+      //           if (Exist) return item;
+      //           else return null;
+      //         })
+      //         .filter(Boolean);
+      //       console.log(`filterblend updated if ID ${items.PlaylistID}`);
+      //       AddSongsIntoPlaylist(songsToBeAdded, items.PlaylistID, access_token);
+
+      //       res.status(200).send(`woking`);
+      //     }
     }
   } catch (e) {
     return;
@@ -216,6 +253,8 @@ const WeeklyplaylistEndpoint = async (req, res) => {
       );
 
       res.status(200).send(`Playlist created and songs added.`);
+    } else {
+      console.log("weekly already setuped");
     }
   } catch (e) {
     throw e;
@@ -229,59 +268,64 @@ const BlendplaylistEndpoint = async (req, res) => {
     let filterPlaylistSongs = [];
     let blendPlaylistSongs = [];
 
-    const Data = await Database.findOne({
+    const BlendData = await Database.findOne({
       UserKey: userId,
     });
+    if (BlendData.Blend.length < 3) {
+      const currenDate = new Date();
+      ISTtime = currenDate.toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+      });
 
-    const currenDate = new Date();
-    ISTtime = currenDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+      const newBlendPlaylist = await Createplaylist(
+        `Filtered_blend created at ${ISTtime}`,
+        `your selected blends, you can change info as you want`,
+        userId,
+        access_token
+      );
 
-    const newBlendPlaylist = await Createplaylist(
-      `Filtered_blend created at ${ISTtime}`,
-      `your selected blends, you can change info as you want`,
-      userId,
-      access_token
-    );
-
-    await Database.findOneAndUpdate(
-      {
-        UserKey: userId,
-      },
-      {
-        $push: {
-          Blend: {
-            selectedBlends: blendPlaylist,
-            selectedFilter: filterPlaylist,
-            PlaylistID: newBlendPlaylist,
-          },
+      await Database.findOneAndUpdate(
+        {
+          UserKey: userId,
         },
-      }
-    );
+        {
+          $push: {
+            Blend: {
+              selectedBlends: blendPlaylist,
+              selectedFilter: filterPlaylist,
+              PlaylistID: newBlendPlaylist,
+            },
+          },
+        }
+      );
 
-    try {
-      for (let item of blendPlaylist) {
-        const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
-        blendPlaylistSongs = blendPlaylistSongs.concat(PlaylistSongs);
+      try {
+        for (let item of blendPlaylist) {
+          const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
+          blendPlaylistSongs = blendPlaylistSongs.concat(PlaylistSongs);
+        }
+        for (let item of filterPlaylist) {
+          const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
+          filterPlaylistSongs = filterPlaylistSongs.concat(PlaylistSongs);
+        }
+      } catch (e) {
+        console.log(`error while fetching songs`);
       }
-      for (let item of filterPlaylist) {
-        const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
-        filterPlaylistSongs = filterPlaylistSongs.concat(PlaylistSongs);
-      }
-    } catch (e) {
-      console.log(`error while fetching songs`);
+
+      const songsToBeAdded = blendPlaylistSongs
+        .map((item) => {
+          const Exist = !filterPlaylistSongs.some((tracks) => tracks === item);
+          if (Exist) return item;
+          else return null;
+        })
+        .filter(Boolean);
+
+      AddSongsIntoPlaylist(songsToBeAdded, newBlendPlaylist, access_token);
+
+      res.status(200).send(`woking?`);
+    } else {
+      console.log(`too many request`);
     }
-
-    const songsToBeAdded = blendPlaylistSongs
-      .map((item) => {
-        const Exist = !filterPlaylistSongs.some((tracks) => tracks === item);
-        if (Exist) return item;
-        else return null;
-      })
-      .filter(Boolean);
-
-    AddSongsIntoPlaylist(songsToBeAdded, newBlendPlaylist, access_token);
-
-    res.status(200).send(`woking?`);
   } catch (e) {
     throw e;
   }

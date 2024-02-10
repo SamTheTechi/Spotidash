@@ -52,7 +52,6 @@ const FilterBlend = () => {
     setTimeout(() => {
       setPlaylistExist(true);
     }, 500);
-    console.log(`data send`);
   };
 
   if (playlistExist === true) {
