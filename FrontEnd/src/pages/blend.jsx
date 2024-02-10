@@ -116,7 +116,7 @@ const FilterBlend = () => {
               <form>
                 {selectedBlends.map((items) => {
                   let Name = items.name;
-                  let imgUrl = items.images[0].url;
+                  let imgUrl = items.images[0]?.url;
                   let Key = items.id;
                   return (
                     <SelectPlatlist
@@ -138,7 +138,7 @@ const FilterBlend = () => {
                 {/* <SelectPlatlist key={} playlistImage={} playlistName={}/> */}
                 {seletedFilter.map((items) => {
                   let Name = items.name;
-                  let imgUrl = items.images[0].url;
+                  let imgUrl = items.images[0]?.url;
                   let Key = items.id;
                   return (
                     <SelectPlatlist

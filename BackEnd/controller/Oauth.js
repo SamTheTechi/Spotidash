@@ -103,6 +103,7 @@ const tokenEndpoint = async (req, res) => {
 const UserIdEndpoint = async (req, res) => {
   const receivedData = await req.body.id;
   userId = receivedData;
+
   try {
     const weeklyPlaylistExist = await Database.findOne({ UserKey: userId });
     if (!weeklyPlaylistExist) {
@@ -146,119 +147,144 @@ const UserIdEndpoint = async (req, res) => {
 };
 
 const WeeklyplaylistEndpoint = async (req, res) => {
-  const Name = await req.body.name;
-  const Description = await req.body.description;
-  const weeklyPlaylistId = await req.body.weeklyPlaylistId;
+  try {
+    const Name = await req.body.name;
+    const Description = await req.body.description;
+    const weeklyPlaylistId = await req.body.weeklyPlaylistId;
 
-  const PlaylistExist = await Database.findOne({
-    UserKey: userId,
-    "Weekly.Exist": false,
-  });
+    const PlaylistExist = await Database.findOne({
+      UserKey: userId,
+      "Weekly.Exist": false,
+    });
 
-  const weeklyPlaylistExist = await Database.findOne({
-    UserKey: userId,
-    "Weekly.Exist": true,
-  });
+    const weeklyPlaylistExist = await Database.findOne({
+      UserKey: userId,
+      "Weekly.Exist": true,
+    });
 
-  const val = await FetchAllUserPlaylist(access_token);
-  const PlaylistExistID = await val
-    .filter((items) => items.id === weeklyPlaylistExist?.Weekly.PlaylistID)
-    .map((item) => item.id)[0];
+    const val = await FetchAllUserPlaylist(access_token);
+    const PlaylistExistID = await val
+      .filter((items) => items.id === weeklyPlaylistExist?.Weekly.PlaylistID)
+      .map((item) => item.id)[0];
 
-  if (PlaylistExist || !PlaylistExistID) {
-    const newWeeklyPlaylist = await Createplaylist(
-      Name,
-      Description,
-      userId,
-      access_token
-    );
-    console.log(`new playlist created for user ${userId}`);
+    if (PlaylistExist || !PlaylistExistID) {
+      const newWeeklyPlaylist = await Createplaylist(
+        Name,
+        Description,
+        userId,
+        access_token
+      );
+      console.log(`new playlist created for user ${userId}`);
 
-    const PlaylistSongs = await FetchSongs(
-      weeklyPlaylistId,
-      50,
-      0,
-      access_token
-    );
+      const PlaylistSongs = await FetchSongs(
+        weeklyPlaylistId,
+        50,
+        0,
+        access_token
+      );
 
-    await Database.findOneAndUpdate(
-      {
-        UserKey: userId,
-        "Weekly.Exist": true,
-      },
-      {
-        $set: {
-          "Weekly.PlaylistID": newWeeklyPlaylist,
-        },
-      }
-    );
-
-    await Database.findOneAndUpdate(
-      {
-        UserKey: userId,
-        "Weekly.Exist": false,
-      },
-      {
-        $set: {
+      await Database.findOneAndUpdate(
+        {
+          UserKey: userId,
           "Weekly.Exist": true,
-          "Weekly.WeeklyID": weeklyPlaylistId,
-          "Weekly.PlaylistID": newWeeklyPlaylist,
         },
-      }
-    );
+        {
+          $set: {
+            "Weekly.PlaylistID": newWeeklyPlaylist,
+          },
+        }
+      );
 
-    await AddSongsIntoPlaylist(PlaylistSongs, newWeeklyPlaylist, access_token);
+      await Database.findOneAndUpdate(
+        {
+          UserKey: userId,
+          "Weekly.Exist": false,
+        },
+        {
+          $set: {
+            "Weekly.Exist": true,
+            "Weekly.WeeklyID": weeklyPlaylistId,
+            "Weekly.PlaylistID": newWeeklyPlaylist,
+          },
+        }
+      );
 
-    res.status(200).send(`Playlist created and songs added.`);
+      await AddSongsIntoPlaylist(
+        PlaylistSongs,
+        newWeeklyPlaylist,
+        access_token
+      );
+
+      res.status(200).send(`Playlist created and songs added.`);
+    }
+  } catch (e) {
+    throw e;
   }
 };
 
 const BlendplaylistEndpoint = async (req, res) => {
-  const filterPlaylist = await req.body.filterlist;
-  const blendPlaylist = await req.body.blendlist;
-  let filterPlaylistSongs = [];
-  let blendPlaylistSongs = [];
-
-  const Data = await Database.findOne({
-    UserKey: userId,
-  });
-
-  const currenDate = new Date();
-  // currenDate.setHours(currenDate.getHours() + 5);
-  // currenDate.setMinutes(currenDate.getMinutes() + 30);
-  ISTtime = currenDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-
-  const newBlendPlaylsit = await Createplaylist(
-    `Filtered_blend created at ${ISTtime}`,
-    `your selected blends, you can change info as you want`,
-    userId,
-    access_token
-  );
-
   try {
-    for (let item of blendPlaylist) {
-      const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
-      blendPlaylistSongs = blendPlaylistSongs.concat(PlaylistSongs);
+    const blendPlaylist = await req.body.blendlist;
+    const filterPlaylist = await req.body.filterlist;
+    let filterPlaylistSongs = [];
+    let blendPlaylistSongs = [];
+
+    const Data = await Database.findOne({
+      UserKey: userId,
+    });
+
+    const currenDate = new Date();
+    ISTtime = currenDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+
+    const newBlendPlaylist = await Createplaylist(
+      `Filtered_blend created at ${ISTtime}`,
+      `your selected blends, you can change info as you want`,
+      userId,
+      access_token
+    );
+
+    await Database.findOneAndUpdate(
+      {
+        UserKey: userId,
+      },
+      {
+        $push: {
+          Blend: {
+            selectedBlends: blendPlaylist,
+            selectedFilter: filterPlaylist,
+            PlaylistID: newBlendPlaylist,
+          },
+        },
+      }
+    );
+
+    try {
+      for (let item of blendPlaylist) {
+        const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
+        blendPlaylistSongs = blendPlaylistSongs.concat(PlaylistSongs);
+      }
+      for (let item of filterPlaylist) {
+        const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
+        filterPlaylistSongs = filterPlaylistSongs.concat(PlaylistSongs);
+      }
+    } catch (e) {
+      console.log(`error while fetching songs`);
     }
-    for (let item of filterPlaylist) {
-      const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
-      filterPlaylistSongs = filterPlaylistSongs.concat(PlaylistSongs);
-    }
+
+    const songsToBeAdded = blendPlaylistSongs
+      .map((item) => {
+        const Exist = !filterPlaylistSongs.some((tracks) => tracks === item);
+        if (Exist) return item;
+        else return null;
+      })
+      .filter(Boolean);
+
+    AddSongsIntoPlaylist(songsToBeAdded, newBlendPlaylist, access_token);
+
+    res.status(200).send(`woking?`);
   } catch (e) {
-    console.log(`error while fetching songs`);
+    throw e;
   }
-
-  const songsToBeAdded = blendPlaylistSongs
-    .map((item) => {
-      const Exist = !filterPlaylistSongs.some((tracks) => tracks === item);
-      if (Exist) return item;
-      else return null;
-    })
-    .filter(Boolean);
-
-  AddSongsIntoPlaylist(songsToBeAdded, newBlendPlaylsit, access_token);
-
-  res.status(200).send(`woking?`);
 };
 
 module.exports = {
