@@ -21,6 +21,31 @@ const TopSongs = () => {
     } catch (e) {}
   });
 
+  const [song, setSong] = useState(null);
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    playing ? audioRef.current.pause() : audioRef.current.play();
+  }, [playing]);
+
+  useEffect(() => {
+    audioRef.current.pause();
+    audioRef.current = new Audio(song);
+    if (playing && song) {
+      audioRef.current.play();
+    }
+  }, [song]);
+
+  const handlePreviewSong = (PreviewUrl) => {
+    if (PreviewUrl === song) {
+      setPlaying(!playing);
+    } else {
+      setSong(PreviewUrl);
+      setPlaying(true);
+    }
+  };
+
   useEffect(() => {
     Tracks();
   }, [token]);
@@ -30,6 +55,7 @@ const TopSongs = () => {
       <section
         className={`flex flex-col ml-1.5 mr-1.5 bg-orange-600 overflow-auto w-[60%] rounded-[15px] scrollbar-hide border-[5px] border-[rgba(0,0,0,0.1)]`}
       >
+        <audio ref={audioRef} src={song}></audio>
         {data.map((items) => {
           let imgUrl = items.album.images.find(
             (item) => item.height === 64
@@ -48,6 +74,7 @@ const TopSongs = () => {
               Name={Name}
               Artist={Artist}
               PreviewUrl={PreviewUrl}
+              handlePreviewSong={() => handlePreviewSong(PreviewUrl)}
             />
           );
         })}
@@ -56,24 +83,13 @@ const TopSongs = () => {
   );
 };
 
-const SongLayer = ({ imgUrl, Name, Artist, PreviewUrl }) => {
-  const [playing, setPlaying] = useState(false);
-  const audioRef = useRef(false);
-
-  const handlePreviewSong = () => {
-    if (audioRef.current) {
-      playing ? audioRef.current.pause() : audioRef.current.play();
-      setPlaying(!playing);
-    }
-  };
-
+const SongLayer = ({ imgUrl, Name, Artist, handlePreviewSong }) => {
   return (
     <>
       <article
         onClick={handlePreviewSong}
         className="p-1.5 pb-3 flex hover:scale-[1.03] hover:text-black  transition duration-150 ease-in cursor-pointer"
       >
-        <audio ref={audioRef} src={PreviewUrl}></audio>
         <img
           src={imgUrl}
           alt={Name}
