@@ -103,39 +103,39 @@ const tokenEndpoint = async (req, res) => {
 const UserIdEndpoint = async (req, res) => {
   const receivedData = await req.body.id;
   userId = receivedData;
-
   try {
-    const weeklyPlaylistExist = await Database.findOne({ UserKey: userId });
-    if (!weeklyPlaylistExist) {
+    const PlaylistExist = await Database.findOne({ UserKey: userId });
+    if (!PlaylistExist) {
       await Database.create({ UserKey: userId });
       console.log(`user created`);
-    } else if (
-      weeklyPlaylistExist &&
-      weeklyPlaylistExist.Weekly.Exist === true
-    ) {
+    }
+    if (PlaylistExist && PlaylistExist.Blend !== null) {
+      console.log(PlaylistExist.Blend !== null);
+      for (let item of PlaylistExist.Blend) {
+        console.log(item);
+      }
+    }
+    if (PlaylistExist && PlaylistExist.Weekly.Exist === true) {
       const PlaylistSongs = await FetchSongs(
-        weeklyPlaylistExist.Weekly.PlaylistID,
+        PlaylistExist.Weekly.PlaylistID,
         50,
         0,
         access_token
       );
-
       const WeeklySongs = await FetchSongs(
-        weeklyPlaylistExist.Weekly.WeeklyID,
+        PlaylistExist.Weekly.WeeklyID,
         50,
         0,
         access_token
       );
-
       const songsToBeAdded = WeeklySongs.map((item) => {
         const Exist = !PlaylistSongs.some((track) => track === item);
         if (Exist) return item;
         else return null;
       }).filter(Boolean);
-
       AddSongsIntoPlaylist(
         songsToBeAdded,
-        weeklyPlaylistExist.Weekly.PlaylistID,
+        PlaylistExist.Weekly.PlaylistID,
         access_token
       );
       console.log(`updateting songs`);
