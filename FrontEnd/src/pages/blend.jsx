@@ -112,7 +112,6 @@ const FilterBlend = () => {
           <section className=" w-[90%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[40%] flex justify-center flex-row h-[55%] md:h-[60%]">
             <article
               className={` bg-yellow-500 p-2 h-[100%] w-[50%] rounded-[15px] mr-2 overflow-auto scrollbar-hide border-[5px] border-[rgba(0,0,0,0.2)] scrollbar-thumb-gray-500`}
-              style={{ scrollbarWidth: "thin" }}
             >
               <form>
                 {selectedBlends.map((items) => {
@@ -193,8 +192,8 @@ const SelectPlatlist = ({
       <label
         className={`text-xl p-1 pt-2 pb-2 mt-2 flex flex-row items-center shadow-customShadow transition ease-out duration-100 ${
           cheakBox
-            ? ` border-gray-600 bg-[rgba(0,0,0,0.2)] text-gray-400`
-            : ` border-gray-500  bg-[rgba(255,252,252,0.1)] hover:scale-[1.02] hover:text-gray-900`
+            ? ` border-gray-600 bg-[rgba(0,0,0,0.2)] text-gray-400 scale-[0.95]`
+            : ` border-gray-500  bg-[rgba(255,252,252,0.1)] hover:scale-[1.05] hover:text-gray-900`
         } 
         border-4 rounded-[12px] mb-2 `}
       >
