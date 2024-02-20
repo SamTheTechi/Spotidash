@@ -3,6 +3,7 @@ require(`dotenv`).config();
 const querystring = require("querystring");
 const axios = require(`axios`);
 const Database = require(`../model/User`);
+const session = require(`express-session`);
 const {
   Createplaylist,
   FetchAllUserPlaylist,
@@ -19,6 +20,8 @@ const redirect_tryagain = process.env.tryagain;
 
 let access_token = ``;
 let userId = "";
+
+const UseSession = ()=>{};
 
 let generateRandomString = (length) => {
   const characters =
@@ -143,39 +146,45 @@ const UserIdEndpoint = async (req, res) => {
         .map((item) => item.id)
         .filter((item) => blendPlaylistIDs.includes(item));
 
-      console.log(yoi);
-      console.log(blendPlaylistIDs);
+      // for(let item of yoi){
+      //   await Database.findOneAndUpdate(
+      //     {
+      //       UserKey: userId,
+      //     },
+      //     $pop:{
 
-      //     for (let items of PlaylistExist.Blend) {
-      //       let filterPlaylistSongs = [];
-      //       let blendPlaylistSongs = [];
-      //       try {
-      //         for (let item of items.selectedBlends) {
-      //           const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
-      //           blendPlaylistSongs = blendPlaylistSongs.concat(PlaylistSongs);
-      //         }
-      //         for (let item of items.selectedFilter) {
-      //           const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
-      //           filterPlaylistSongs = filterPlaylistSongs.concat(PlaylistSongs);
-      //         }
-      //       } catch (e) {
-      //         console.log(`error while fetching songs`);
-      //       }
+      //     },
+      //   )
+      // }
 
-      //       const songsToBeAdded = blendPlaylistSongs
-      //         .map((item) => {
-      //           const Exist = !filterPlaylistSongs.some(
-      //             (tracks) => tracks === item
-      //           );
-      //           if (Exist) return item;
-      //           else return null;
-      //         })
-      //         .filter(Boolean);
-      //       console.log(`filterblend updated if ID ${items.PlaylistID}`);
-      //       AddSongsIntoPlaylist(songsToBeAdded, items.PlaylistID, access_token);
+      for (let items of PlaylistExist.Blend) {
+        let filterPlaylistSongs = [];
+        let blendPlaylistSongs = [];
+        try {
+          for (let item of items.selectedBlends) {
+            const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
+            blendPlaylistSongs = blendPlaylistSongs.concat(PlaylistSongs);
+          }
+          for (let item of items.selectedFilter) {
+            const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
+            filterPlaylistSongs = filterPlaylistSongs.concat(PlaylistSongs);
+          }
+        } catch (e) {
+          console.log(`error while fetching songs`);
+        }
 
-      //       res.status(200).send(`woking`);
-      //     }
+        const songsToBeAdded = blendPlaylistSongs
+          .map((item) => {
+            const Exist = !filterPlaylistSongs.some(
+              (tracks) => tracks === item
+            );
+            if (Exist) return item;
+            else return null;
+          })
+          .filter(Boolean);
+        console.log(`filterblend updated of ID ${items.PlaylistID}`);
+        AddSongsIntoPlaylist(songsToBeAdded, items.PlaylistID, access_token);
+      }
     }
   } catch (e) {
     return;
@@ -264,7 +273,8 @@ const WeeklyplaylistEndpoint = async (req, res) => {
 const BlendplaylistEndpoint = async (req, res) => {
   try {
     const blendPlaylist = await req.body.blendlist;
-    const filterPlaylist = await req.body.filterlist;
+    let filterPlaylist = await req.body.filterlist;
+
     let filterPlaylistSongs = [];
     let blendPlaylistSongs = [];
 
@@ -314,8 +324,13 @@ const BlendplaylistEndpoint = async (req, res) => {
 
       const songsToBeAdded = blendPlaylistSongs
         .map((item) => {
-          const Exist = !filterPlaylistSongs.some((tracks) => tracks === item);
-          if (Exist) return item;
+          const ExistFilter = !filterPlaylistSongs.some(
+            (tracks) => tracks === item
+          );
+          const ExistBlend = !blendPlaylistSongs.some(
+            (tracks) => tracks === item
+          );
+          if (ExistBlend && ExistBlend) return item;
           else return null;
         })
         .filter(Boolean);
@@ -338,4 +353,5 @@ module.exports = {
   UserIdEndpoint,
   WeeklyplaylistEndpoint,
   BlendplaylistEndpoint,
+  UseSession,
 };
