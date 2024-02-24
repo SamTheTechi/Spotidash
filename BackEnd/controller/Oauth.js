@@ -1,32 +1,32 @@
 require(`dotenv`).config();
 
-const querystring = require("querystring");
+const querystring = require('querystring');
 const axios = require(`axios`);
 const Database = require(`../model/User`);
-const session = require(`express-session`);
+
 const {
   Createplaylist,
   FetchAllUserPlaylist,
   FetchSongs,
   AddSongsIntoPlaylist,
-} = require("./function");
+} = require('./function');
 
 const client_id = process.env.client_id;
 const client_secret = process.env.client_secret;
 
-const redirect_uri = "http://localhost:5000/callback";
+const redirect_uri = 'http://localhost:5000/callback';
 const redirect_dashboard = process.env.dashboardpage;
 const redirect_tryagain = process.env.tryagain;
 
-let access_token = ``;
-let userId = "";
-
-const UseSession = ()=>{};
+// const { access_token, userId } = req.session;
+// req.session.access_token = access_token;
+// req.session.userId = userId;
+access_token = ``;
+let userId = '';
 
 let generateRandomString = (length) => {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
   for (let i = 0; i < length; i++) {
     const randomIndex = Math.floor(Math.random() * characters.length);
     result += characters.charAt(randomIndex);
@@ -37,12 +37,12 @@ let generateRandomString = (length) => {
 const login = async (req, res) => {
   var state = generateRandomString(16);
   var scope =
-    "user-read-private user-library-read playlist-read-private playlist-modify-private playlist-modify-public user-top-read ";
+    'user-read-private user-library-read playlist-read-private playlist-modify-private playlist-modify-public user-top-read ';
 
   res.redirect(
-    "https://accounts.spotify.com/authorize?" +
+    'https://accounts.spotify.com/authorize?' +
       querystring.stringify({
-        response_type: "code",
+        response_type: 'code',
         client_id: client_id,
         scope: scope,
         redirect_uri: redirect_uri,
@@ -56,39 +56,33 @@ const callback = async (req, res) => {
   var state = req.query.state || null;
   if (state === null) {
     res.redirect(
-      "/#" +
+      '/#' +
         querystring.stringify({
-          error: "state_mismatch",
+          error: 'state_mismatch',
         })
     );
   } else {
     var authOptions = {
-      url: "https://accounts.spotify.com/api/token",
+      url: 'https://accounts.spotify.com/api/token',
       form: {
         code: code,
         redirect_uri: redirect_uri,
-        grant_type: "authorization_code",
+        grant_type: 'authorization_code',
       },
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        'Content-Type': 'application/x-www-form-urlencoded',
         Authorization:
-          "Basic " +
+          'Basic ' +
           Buffer.from(
-            encodeURIComponent(client_id) +
-              ":" +
-              encodeURIComponent(client_secret)
-          ).toString("base64"),
+            encodeURIComponent(client_id) + ':' + encodeURIComponent(client_secret)
+          ).toString('base64'),
       },
     };
 
     try {
-      const response = await axios.post(
-        authOptions.url,
-        querystring.stringify(authOptions.form),
-        {
-          headers: authOptions.headers,
-        }
-      );
+      const response = await axios.post(authOptions.url, querystring.stringify(authOptions.form), {
+        headers: authOptions.headers,
+      });
       access_token = response.data.access_token;
       res.status(200).redirect(redirect_dashboard);
       console.log(`Access_token Recived`);
@@ -113,38 +107,20 @@ const UserIdEndpoint = async (req, res) => {
       console.log(`user created`);
     }
     if (PlaylistExist && PlaylistExist.Weekly.Exist === true) {
-      const PlaylistSongs = await FetchSongs(
-        PlaylistExist.Weekly.PlaylistID,
-        50,
-        0,
-        access_token
-      );
-      const WeeklySongs = await FetchSongs(
-        PlaylistExist.Weekly.WeeklyID,
-        50,
-        0,
-        access_token
-      );
+      const PlaylistSongs = await FetchSongs(PlaylistExist.Weekly.PlaylistID, 50, 0, access_token);
+      const WeeklySongs = await FetchSongs(PlaylistExist.Weekly.WeeklyID, 50, 0, access_token);
       const songsToBeAdded = WeeklySongs.map((item) => {
         const Exist = !PlaylistSongs.some((track) => track === item);
         if (Exist) return item;
         else return null;
       }).filter(Boolean);
-      AddSongsIntoPlaylist(
-        songsToBeAdded,
-        PlaylistExist.Weekly.PlaylistID,
-        access_token
-      );
+      AddSongsIntoPlaylist(songsToBeAdded, PlaylistExist.Weekly.PlaylistID, access_token);
       console.log(`weekly updated`);
     }
     if (PlaylistExist && PlaylistExist.Blend !== null) {
       const val = await FetchAllUserPlaylist(access_token);
-      const blendPlaylistIDs = PlaylistExist.Blend.map(
-        (item) => item.PlaylistID
-      );
-      const yoi = val
-        .map((item) => item.id)
-        .filter((item) => blendPlaylistIDs.includes(item));
+      const blendPlaylistIDs = PlaylistExist.Blend.map((item) => item.PlaylistID);
+      const yoi = val.map((item) => item.id).filter((item) => blendPlaylistIDs.includes(item));
 
       // for(let item of yoi){
       //   await Database.findOneAndUpdate(
@@ -175,9 +151,7 @@ const UserIdEndpoint = async (req, res) => {
 
         const songsToBeAdded = blendPlaylistSongs
           .map((item) => {
-            const Exist = !filterPlaylistSongs.some(
-              (tracks) => tracks === item
-            );
+            const Exist = !filterPlaylistSongs.some((tracks) => tracks === item);
             if (Exist) return item;
             else return null;
           })
@@ -200,12 +174,12 @@ const WeeklyplaylistEndpoint = async (req, res) => {
 
     const PlaylistExist = await Database.findOne({
       UserKey: userId,
-      "Weekly.Exist": false,
+      'Weekly.Exist': false,
     });
 
     const weeklyPlaylistExist = await Database.findOne({
       UserKey: userId,
-      "Weekly.Exist": true,
+      'Weekly.Exist': true,
     });
 
     const val = await FetchAllUserPlaylist(access_token);
@@ -214,29 +188,19 @@ const WeeklyplaylistEndpoint = async (req, res) => {
       .map((item) => item.id)[0];
 
     if (PlaylistExist || !PlaylistExistID) {
-      const newWeeklyPlaylist = await Createplaylist(
-        Name,
-        Description,
-        userId,
-        access_token
-      );
+      const newWeeklyPlaylist = await Createplaylist(Name, Description, userId, access_token);
       console.log(`new playlist created for user ${userId}`);
 
-      const PlaylistSongs = await FetchSongs(
-        weeklyPlaylistId,
-        50,
-        0,
-        access_token
-      );
+      const PlaylistSongs = await FetchSongs(weeklyPlaylistId, 50, 0, access_token);
 
       await Database.findOneAndUpdate(
         {
           UserKey: userId,
-          "Weekly.Exist": true,
+          'Weekly.Exist': true,
         },
         {
           $set: {
-            "Weekly.PlaylistID": newWeeklyPlaylist,
+            'Weekly.PlaylistID': newWeeklyPlaylist,
           },
         }
       );
@@ -244,26 +208,22 @@ const WeeklyplaylistEndpoint = async (req, res) => {
       await Database.findOneAndUpdate(
         {
           UserKey: userId,
-          "Weekly.Exist": false,
+          'Weekly.Exist': false,
         },
         {
           $set: {
-            "Weekly.Exist": true,
-            "Weekly.WeeklyID": weeklyPlaylistId,
-            "Weekly.PlaylistID": newWeeklyPlaylist,
+            'Weekly.Exist': true,
+            'Weekly.WeeklyID': weeklyPlaylistId,
+            'Weekly.PlaylistID': newWeeklyPlaylist,
           },
         }
       );
 
-      await AddSongsIntoPlaylist(
-        PlaylistSongs,
-        newWeeklyPlaylist,
-        access_token
-      );
+      await AddSongsIntoPlaylist(PlaylistSongs, newWeeklyPlaylist, access_token);
 
       res.status(200).send(`Playlist created and songs added.`);
     } else {
-      console.log("weekly already setuped");
+      console.log('weekly already setuped');
     }
   } catch (e) {
     throw e;
@@ -283,8 +243,8 @@ const BlendplaylistEndpoint = async (req, res) => {
     });
     if (BlendData.Blend.length < 3) {
       const currenDate = new Date();
-      ISTtime = currenDate.toLocaleString("en-IN", {
-        timeZone: "Asia/Kolkata",
+      ISTtime = currenDate.toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
       });
 
       const newBlendPlaylist = await Createplaylist(
@@ -324,12 +284,8 @@ const BlendplaylistEndpoint = async (req, res) => {
 
       const songsToBeAdded = blendPlaylistSongs
         .map((item) => {
-          const ExistFilter = !filterPlaylistSongs.some(
-            (tracks) => tracks === item
-          );
-          const ExistBlend = !blendPlaylistSongs.some(
-            (tracks) => tracks === item
-          );
+          const ExistFilter = !filterPlaylistSongs.some((tracks) => tracks === item);
+          const ExistBlend = !blendPlaylistSongs.some((tracks) => tracks === item);
           if (ExistBlend && ExistBlend) return item;
           else return null;
         })
@@ -350,8 +306,7 @@ module.exports = {
   login,
   callback,
   tokenEndpoint,
-  UserIdEndpoint,
   WeeklyplaylistEndpoint,
   BlendplaylistEndpoint,
-  UseSession,
+  UserIdEndpoint,
 };

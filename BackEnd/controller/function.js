@@ -1,4 +1,4 @@
-const axios = require("axios");
+const axios = require('axios');
 
 const Createplaylist = async (Name, Description, UserID, access_token) => {
   try {
@@ -16,9 +16,7 @@ const Createplaylist = async (Name, Description, UserID, access_token) => {
     );
     const val = await FetchAllUserPlaylist(access_token);
     return (data = val
-      .filter(
-        (items) => items.name === Name || items.description === Description
-      )
+      .filter((items) => items.name === Name || items.description === Description)
       .map((item) => item.id)[0]);
   } catch (e) {
     console.log(`error while creating New playlist`, e);
@@ -27,14 +25,11 @@ const Createplaylist = async (Name, Description, UserID, access_token) => {
 
 const FetchAllUserPlaylist = async (access_token) => {
   try {
-    const response = await axios.get(
-      "https://api.spotify.com/v1/me/playlists",
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      }
-    );
+    const response = await axios.get('https://api.spotify.com/v1/me/playlists', {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
     let data = response.data.items;
     return data;
   } catch (e) {
@@ -86,7 +81,7 @@ const AddSongsIntoPlaylist = async (songs, PlaylistId, access_token) => {
           }
         );
 
-        let track = item.split(":")[2];
+        let track = item.split(':')[2];
         await new Promise((resolve) => setTimeout(resolve, 50));
       } catch (e) {
         console.error(`Error adding track: ${e.message}`);
@@ -97,9 +92,25 @@ const AddSongsIntoPlaylist = async (songs, PlaylistId, access_token) => {
   }
 };
 
+const UserInfo = async (access_token) => {
+  let userId;
+  try {
+    const response = await axios.get(`https://api.spotify.com/v1/me`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+    userId = response.data;
+  } catch (e) {
+    // console.log(`oogaa booga `);
+  }
+  return userId;
+};
+
 module.exports = {
   Createplaylist,
   FetchAllUserPlaylist,
   FetchSongs,
   AddSongsIntoPlaylist,
+  UserInfo,
 };
