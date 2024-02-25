@@ -18,12 +18,6 @@ const redirect_uri = 'http://localhost:5000/callback';
 const redirect_dashboard = process.env.dashboardpage;
 const redirect_tryagain = process.env.tryagain;
 
-// const { access_token, userId } = req.session;
-// req.session.access_token = access_token;
-// req.session.userId = userId;
-access_token = ``;
-let userId = '';
-
 let generateRandomString = (length) => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
@@ -54,6 +48,7 @@ const login = async (req, res) => {
 const callback = async (req, res) => {
   var code = req.query.code || null;
   var state = req.query.state || null;
+
   if (state === null) {
     res.redirect(
       '/#' +
@@ -83,23 +78,26 @@ const callback = async (req, res) => {
       const response = await axios.post(authOptions.url, querystring.stringify(authOptions.form), {
         headers: authOptions.headers,
       });
-      access_token = response.data.access_token;
+      req.session.access_token = response.data.access_token;
       res.status(200).redirect(redirect_dashboard);
-      console.log(`Access_token Recived`);
     } catch (e) {
       console.error(e);
-      res.status(500).res.response(redirect_tryagain);
+      res.status(500).redirect(redirect_tryagain);
     }
   }
 };
 
 const tokenEndpoint = async (req, res) => {
-  res.json({ access_token });
+  let access = req.session.access_token;
+  console.log(access);
+  res.json({ access });
 };
 
 const UserIdEndpoint = async (req, res) => {
   const receivedData = await req.body.id;
-  userId = receivedData;
+  req.session.userId = `${receivedData}`;
+  userId = req.session.userId;
+
   try {
     const PlaylistExist = await Database.findOne({ UserKey: userId });
     if (!PlaylistExist) {
@@ -118,9 +116,9 @@ const UserIdEndpoint = async (req, res) => {
       console.log(`weekly updated`);
     }
     if (PlaylistExist && PlaylistExist.Blend !== null) {
-      const val = await FetchAllUserPlaylist(access_token);
-      const blendPlaylistIDs = PlaylistExist.Blend.map((item) => item.PlaylistID);
-      const yoi = val.map((item) => item.id).filter((item) => blendPlaylistIDs.includes(item));
+      // const val = await FetchAllUserPlaylist(access_token);
+      // const blendPlaylistIDs = PlaylistExist.Blend.map((item) => item.PlaylistID);
+      // const yoi = val.map((item) => item.id).filter((item) => blendPlaylistIDs.includes(item));
 
       // for(let item of yoi){
       //   await Database.findOneAndUpdate(
@@ -167,6 +165,7 @@ const UserIdEndpoint = async (req, res) => {
 };
 
 const WeeklyplaylistEndpoint = async (req, res) => {
+  const { access_token, userId } = req.session;
   try {
     const Name = await req.body.name;
     const Description = await req.body.description;
@@ -231,6 +230,7 @@ const WeeklyplaylistEndpoint = async (req, res) => {
 };
 
 const BlendplaylistEndpoint = async (req, res) => {
+  const { access_token, userId } = req.session;
   try {
     const blendPlaylist = await req.body.blendlist;
     let filterPlaylist = await req.body.filterlist;
@@ -241,7 +241,7 @@ const BlendplaylistEndpoint = async (req, res) => {
     const BlendData = await Database.findOne({
       UserKey: userId,
     });
-    if (BlendData.Blend.length < 3) {
+    if (BlendData?.Blend.length < 3 || BlendData?.Blend.length === (null || undefined)) {
       const currenDate = new Date();
       ISTtime = currenDate.toLocaleString('en-IN', {
         timeZone: 'Asia/Kolkata',

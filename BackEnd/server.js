@@ -3,6 +3,7 @@ require(`express-async-errors`);
 
 const cors = require(`cors`);
 const express = require(`express`);
+const session = require(`express-session`);
 
 const ConnectDB = require(`./DB/connect`);
 const app = express();
@@ -11,6 +12,14 @@ const Oauth = require(`./router/Oauth`);
 const api = require(`./router/Api`);
 app.use(cors());
 app.use(express.json());
+
+app.use(
+  session({
+    secret: 'AreYouMaggi?CozICreaveYouAllTheTime',
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 app.use(`/`, Oauth);
 app.use(`/api/v1`, api);

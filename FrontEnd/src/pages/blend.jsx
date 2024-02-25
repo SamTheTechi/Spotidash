@@ -52,84 +52,80 @@ const FilterBlend = () => {
   if (playlistExist === true) {
     return (
       <>
-        <main className='bg-black h-screen w-screen text-white overflow-x box-border m-0 p-0 flex items-center justify-items-center flex-col'>
-          <header className=' flex justify-end flex-row h-[10%] w-[100%] pt-10 pr-20 overflow-hidden mb-24'>
-            <Link to={`/dashboard`}>
-              <button className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[9rem] h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]'>
-                Go-Back
-              </button>
-            </Link>
-          </header>
-          <section className='flex items-center justify-center w-[75%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[30%] h-[55%]'>
-            <div className='flex flex-col text-4xl'>
-              Playlist Added!
-              <span className=' text-lg text-center mt-1'>might take a few while</span>
-            </div>
-          </section>
-        </main>
+        <header className=' flex justify-end flex-row h-[10%] w-[100%] pt-10 pr-20 overflow-hidden mb-24'>
+          <Link to={`/dashboard`}>
+            <button className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[9rem] h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]'>
+              Go-Back
+            </button>
+          </Link>
+        </header>
+        <section className='flex items-center justify-center w-[75%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[30%] h-[55%]'>
+          <div className='flex flex-col text-4xl'>
+            Playlist Added!
+            <span className=' text-lg text-center mt-1'>might take a few while</span>
+          </div>
+        </section>
       </>
     );
   } else {
     return (
       <>
-        <main className='bg-black h-screen w-screen text-white overflow-x box-border m-0 p-0 flex items-center justify-items-center flex-col'>
-          <header className=' flex justify-end flex-row h-[10%] w-[100%] pt-10 pr-20 overflow-hidden mb-12'>
-            <Link to={`/dashboard`}>
-              <button className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[9rem] h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]'>
-                Go-Back
-              </button>
-            </Link>
-          </header>
+        <header className=' flex justify-end flex-row h-[10%] w-[100%] pt-10 pr-20 overflow-hidden mb-12'>
+          <Link to={`/dashboard`}>
+            <button className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[9rem] h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]'>
+              Go-Back
+            </button>
+          </Link>
+        </header>
 
-          <section className=' w-[90%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[40%] flex justify-center flex-row h-[55%] md:h-[60%]'>
-            <article
-              className={` bg-yellow-500 p-2 h-[100%] w-[50%] rounded-[15px] mr-2 overflow-auto scrollbar-hide border-[5px] border-[rgba(0,0,0,0.2)] scrollbar-thumb-gray-500`}>
-              <form>
-                {selectedBlends.map((items) => {
-                  let Name = items.name;
-                  let imgUrl = items.images[0]?.url;
-                  let Key = items.id;
-                  return (
-                    <SelectPlatlist
-                      key={Key}
-                      playlistImage={imgUrl}
-                      playlistName={Name}
-                      playlistIds={Key}
-                      setSelectedItems={setSelectedItems}
-                      selectedList='blendlist'
-                    />
-                  );
-                })}
-              </form>
-            </article>
-            <article
-              className={` bg-purple-800 p-2 h-[100%] w-[50%] rounded-[15px] mr-2 overflow-auto scrollbar-hide border-[5px] border-[rgba(0,0,0,0.2)] scrollbar-thumb-black`}>
-              <form>
-                {/* <SelectPlatlist key={} playlistImage={} playlistName={}/> */}
-                {seletedFilter.map((items) => {
-                  let Name = items.name;
-                  let imgUrl = items.images[0]?.url;
-                  let Key = items.id;
-                  return (
-                    <SelectPlatlist
-                      key={Key}
-                      playlistImage={imgUrl}
-                      playlistName={Name}
-                      playlistIds={Key}
-                      setSelectedItems={setSelectedItems}
-                      selectedList='filterlist'
-                    />
-                  );
-                })}
-              </form>
-            </article>
-          </section>
-          <button
-            className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover min-w-[25rem] aspect-[8/1] rounded-[30px] pt-[-80px] border-[5px] border-[rgba(0,0,0,0.2)] mt-[5vh] '
-            onClick={handleSubmit}>
-            FilterPlaylist
-          </button>
-        </main>
+        <section className=' w-[90%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[40%] flex justify-center flex-row h-[55%] md:h-[60%]'>
+          <article
+            className={` bg-yellow-500 p-2 h-[100%] w-[50%] rounded-[15px] mr-2 overflow-auto scrollbar-hide border-[5px] border-[rgba(0,0,0,0.2)] scrollbar-thumb-gray-500`}>
+            <form>
+              {selectedBlends.map((items) => {
+                let Name = items.name;
+                let imgUrl = items.images[0]?.url;
+                let Key = items.id;
+                return (
+                  <SelectPlatlist
+                    key={Key}
+                    playlistImage={imgUrl}
+                    playlistName={Name}
+                    playlistIds={Key}
+                    setSelectedItems={setSelectedItems}
+                    selectedList='blendlist'
+                  />
+                );
+              })}
+            </form>
+          </article>
+          <article
+            className={` bg-purple-800 p-2 h-[100%] w-[50%] rounded-[15px] mr-2 overflow-auto scrollbar-hide border-[5px] border-[rgba(0,0,0,0.2)] scrollbar-thumb-black`}>
+            <form>
+              {/* <SelectPlatlist key={} playlistImage={} playlistName={}/> */}
+              {seletedFilter.map((items) => {
+                let Name = items.name;
+                let imgUrl = items.images[0]?.url;
+                let Key = items.id;
+                return (
+                  <SelectPlatlist
+                    key={Key}
+                    playlistImage={imgUrl}
+                    playlistName={Name}
+                    playlistIds={Key}
+                    setSelectedItems={setSelectedItems}
+                    selectedList='filterlist'
+                  />
+                );
+              })}
+            </form>
+          </article>
+        </section>
+        <button
+          className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover min-w-[25rem] aspect-[8/1] rounded-[30px] pt-[-80px] border-[5px] border-[rgba(0,0,0,0.2)] mt-[5vh] '
+          onClick={handleSubmit}>
+          FilterPlaylist
+        </button>
       </>
     );
   }
