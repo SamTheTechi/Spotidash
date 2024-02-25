@@ -92,25 +92,9 @@ const AddSongsIntoPlaylist = async (songs, PlaylistId, access_token) => {
   }
 };
 
-const UserInfo = async (access_token) => {
-  let userId;
-  try {
-    const response = await axios.get(`https://api.spotify.com/v1/me`, {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
-    userId = response.data;
-  } catch (e) {
-    // console.log(`oogaa booga `);
-  }
-  return userId;
-};
-
 module.exports = {
   Createplaylist,
   FetchAllUserPlaylist,
   FetchSongs,
   AddSongsIntoPlaylist,
-  UserInfo,
 };

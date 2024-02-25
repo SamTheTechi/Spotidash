@@ -5,7 +5,7 @@ const baseURL = 'http://localhost:5000/api/v1/UserId';
 
 const Navbar = () => {
   const { token } = useContext(TokenContext);
-  const [userID, setUserID] = useState('');
+  const [userID, setUserID] = useState(null);
   const [userInfo, setUserInfo] = useState('');
 
   useEffect(() => {
@@ -39,15 +39,19 @@ const Navbar = () => {
   }, [userID]);
 
   return (
-    <header className=' flex justify-between flex-row h-[10%] w-[100%] pt-10 pl-5 pr-20 overflow-hidden'>
+    <header className=' flex justify-between flex-row h-[10%] w-[100%] pt-4 pl-5 pr-16 overflow-hidden'>
       <div className='flex'>
-        <img
-          src='https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png'
-          alt=''
-          className='pr-1 h-[1.6rem]'
-        />
-        <h2 className='items-center text-[1rem] font-semibold'>SpotiDash</h2>
+        <h2 className='items-center text-xl text-customLightGray font-semibold'>
+          Welcome,
+          <span className='text-2xl text-white'> {userInfo.display_name} </span>
+          <span className='text-base'>({userInfo.product})</span>
+        </h2>
       </div>
+      <img
+        src={userInfo.images?.[0]?.url || `/UserIcon.png`}
+        alt={userInfo.display_name}
+        className='h-18  aspect-square object-cover rounded-[50%] border-[5px] border-customLightGray'
+      />
     </header>
   );
 };
