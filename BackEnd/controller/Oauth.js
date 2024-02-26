@@ -11,6 +11,9 @@ const {
   AddSongsIntoPlaylist,
 } = require('./function');
 
+let userId = ``;
+let access_token = ``;
+
 const client_id = process.env.client_id;
 const client_secret = process.env.client_secret;
 
@@ -78,7 +81,8 @@ const callback = async (req, res) => {
       const response = await axios.post(authOptions.url, querystring.stringify(authOptions.form), {
         headers: authOptions.headers,
       });
-      req.session.access_token = response.data.access_token;
+      // req.session.access_token = response.data.access_token;
+      access_token = response.data.access_token;
       res.status(200).redirect(redirect_dashboard);
     } catch (e) {
       console.error(e);
@@ -88,15 +92,18 @@ const callback = async (req, res) => {
 };
 
 const tokenEndpoint = async (req, res) => {
-  let access = req.session.access_token;
-  console.log(access);
-  res.json({ access });
+  try {
+    // access_token = req.session.access_token;
+    res.json({ access_token });
+  } catch (e) {
+    throw e;
+  }
 };
 
 const UserIdEndpoint = async (req, res) => {
-  const receivedData = await req.body.id;
-  req.session.userId = `${receivedData}`;
-  userId = req.session.userId;
+  const receivedData = req.body.id;
+  // req.session.userId = `${receivedData}`;
+  userId = receivedData;
 
   try {
     const PlaylistExist = await Database.findOne({ UserKey: userId });
@@ -165,7 +172,7 @@ const UserIdEndpoint = async (req, res) => {
 };
 
 const WeeklyplaylistEndpoint = async (req, res) => {
-  const { access_token, userId } = req.session;
+  // const { access_token, userId } = req.session;s
   try {
     const Name = await req.body.name;
     const Description = await req.body.description;
@@ -230,7 +237,7 @@ const WeeklyplaylistEndpoint = async (req, res) => {
 };
 
 const BlendplaylistEndpoint = async (req, res) => {
-  const { access_token, userId } = req.session;
+  // const { access_token, userId } = req.session;
   try {
     const blendPlaylist = await req.body.blendlist;
     let filterPlaylist = await req.body.filterlist;
