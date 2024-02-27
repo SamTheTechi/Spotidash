@@ -16,10 +16,7 @@ let access_token = ``;
 
 const client_id = process.env.client_id;
 const client_secret = process.env.client_secret;
-
 const redirect_uri = 'http://localhost:5000/callback';
-const redirect_dashboard = process.env.dashboardpage;
-const redirect_tryagain = process.env.tryagain;
 
 let generateRandomString = (length) => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -32,6 +29,7 @@ let generateRandomString = (length) => {
 };
 
 const login = async (req, res) => {
+  req.session.redirectUrl = req.query.redirectUrl;
   var state = generateRandomString(16);
   var scope =
     'user-read-private user-library-read playlist-read-private playlist-modify-private playlist-modify-public user-top-read ';
@@ -49,6 +47,7 @@ const login = async (req, res) => {
 };
 
 const callback = async (req, res) => {
+  let redirectUrl = req.session.redirectUrl;
   var code = req.query.code || null;
   var state = req.query.state || null;
 
@@ -81,29 +80,24 @@ const callback = async (req, res) => {
       const response = await axios.post(authOptions.url, querystring.stringify(authOptions.form), {
         headers: authOptions.headers,
       });
-      // req.session.access_token = response.data.access_token;
       access_token = response.data.access_token;
-      res.status(200).redirect(redirect_dashboard);
+      res.status(200).redirect(`${redirectUrl}/dashboard`);
     } catch (e) {
       console.error(e);
-      res.status(500).redirect(redirect_tryagain);
+      res.status(500).redirect(`${redirectUrl}/login`);
     }
+    req.session.access_token = access_token;
   }
 };
 
 const tokenEndpoint = async (req, res) => {
-  try {
-    // access_token = req.session.access_token;
-    res.json({ access_token });
-  } catch (e) {
-    throw e;
-  }
+  res.json({ access_token });
 };
 
 const UserIdEndpoint = async (req, res) => {
   const receivedData = req.body.id;
-  // req.session.userId = `${receivedData}`;
   userId = receivedData;
+  req.session.userId = receivedData;
 
   try {
     const PlaylistExist = await Database.findOne({ UserKey: userId });
@@ -122,49 +116,49 @@ const UserIdEndpoint = async (req, res) => {
       AddSongsIntoPlaylist(songsToBeAdded, PlaylistExist.Weekly.PlaylistID, access_token);
       console.log(`weekly updated`);
     }
-    if (PlaylistExist && PlaylistExist.Blend !== null) {
-      // const val = await FetchAllUserPlaylist(access_token);
-      // const blendPlaylistIDs = PlaylistExist.Blend.map((item) => item.PlaylistID);
-      // const yoi = val.map((item) => item.id).filter((item) => blendPlaylistIDs.includes(item));
+    //   if (PlaylistExist && PlaylistExist.Blend !== null) {
+    //     // const val = await FetchAllUserPlaylist(access_token);
+    //     // const blendPlaylistIDs = PlaylistExist.Blend.map((item) => item.PlaylistID);
+    //     // const yoi = val.map((item) => item.id).filter((item) => blendPlaylistIDs.includes(item));
 
-      // for(let item of yoi){
-      //   await Database.findOneAndUpdate(
-      //     {
-      //       UserKey: userId,
-      //     },
-      //     $pop:{
+    //     // for(let item of yoi){
+    //     //   await Database.findOneAndUpdate(
+    //     //     {
+    //     //       UserKey: userId,
+    //     //     },
+    //     //     $pop:{
 
-      //     },
-      //   )
-      // }
+    //     //     },
+    //     //   )
+    //     // }
 
-      for (let items of PlaylistExist.Blend) {
-        let filterPlaylistSongs = [];
-        let blendPlaylistSongs = [];
-        try {
-          for (let item of items.selectedBlends) {
-            const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
-            blendPlaylistSongs = blendPlaylistSongs.concat(PlaylistSongs);
-          }
-          for (let item of items.selectedFilter) {
-            const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
-            filterPlaylistSongs = filterPlaylistSongs.concat(PlaylistSongs);
-          }
-        } catch (e) {
-          console.log(`error while fetching songs`);
-        }
+    //     for (let items of PlaylistExist.Blend) {
+    //       let filterPlaylistSongs = [];
+    //       let blendPlaylistSongs = [];
+    //       try {
+    //         for (let item of items.selectedBlends) {
+    //           const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
+    //           blendPlaylistSongs = blendPlaylistSongs.concat(PlaylistSongs);
+    //         }
+    //         for (let item of items.selectedFilter) {
+    //           const PlaylistSongs = await FetchSongs(item, 50, 0, access_token);
+    //           filterPlaylistSongs = filterPlaylistSongs.concat(PlaylistSongs);
+    //         }
+    //       } catch (e) {
+    //         console.log(`error while fetching songs`);
+    //       }
 
-        const songsToBeAdded = blendPlaylistSongs
-          .map((item) => {
-            const Exist = !filterPlaylistSongs.some((tracks) => tracks === item);
-            if (Exist) return item;
-            else return null;
-          })
-          .filter(Boolean);
-        console.log(`filterblend updated of ID ${items.PlaylistID}`);
-        AddSongsIntoPlaylist(songsToBeAdded, items.PlaylistID, access_token);
-      }
-    }
+    //       const songsToBeAdded = blendPlaylistSongs
+    //         .map((item) => {
+    //           const Exist = !filterPlaylistSongs.some((tracks) => tracks === item);
+    //           if (Exist) return item;
+    //           else return null;
+    //         })
+    //         .filter(Boolean);
+    //       console.log(`filterblend updated of ID ${items.PlaylistID}`);
+    //       AddSongsIntoPlaylist(songsToBeAdded, items.PlaylistID, access_token);
+    //     }
+    //   }
   } catch (e) {
     return;
   }
@@ -172,7 +166,6 @@ const UserIdEndpoint = async (req, res) => {
 };
 
 const WeeklyplaylistEndpoint = async (req, res) => {
-  // const { access_token, userId } = req.session;s
   try {
     const Name = await req.body.name;
     const Description = await req.body.description;
