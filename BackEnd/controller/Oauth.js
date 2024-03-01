@@ -29,7 +29,7 @@ const login = async (req, res) => {
         response_type: 'code',
         client_id: CLIENT_ID,
         scope: scope,
-        redirect_uri: CALLBACK_URL,
+        redirect_uri: `${req.protocol}://${req.get('host')}/${CALLBACK_URL}`,
         state: state,
       })
   );
@@ -51,7 +51,7 @@ const callback = async (req, res) => {
       url: 'https://accounts.spotify.com/api/token',
       form: {
         code: code,
-        redirect_uri: CALLBACK_URL,
+        redirect_uri: `${req.protocol}://${req.get('host')}/${CALLBACK_URL}`,
         grant_type: 'authorization_code',
       },
       headers: {
