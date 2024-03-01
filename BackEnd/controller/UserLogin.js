@@ -13,7 +13,6 @@ const {
 const UserIdEndpoint = async (req, res) => {
   let access_token = req.cookies.Userdata;
   const userId = req.body.id;
-  req.session.userId = userId;
 
   try {
     const PlaylistExist = await Database.findOne({ UserKey: userId });

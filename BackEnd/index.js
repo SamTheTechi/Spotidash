@@ -3,6 +3,7 @@ require(`express-async-errors`);
 
 const cors = require(`cors`);
 const express = require(`express`);
+const cookie = require(`cookie-parser`);
 
 const port = process.env.PORT || process.env.LOCALPORT;
 const MONGO_ATLAS = process.env.MONGO_ATLAS;
