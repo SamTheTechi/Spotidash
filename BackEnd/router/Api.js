@@ -1,13 +1,9 @@
 const express = require(`express`);
 const router = express.Router();
-const {
-  tokenEndpoint,
-  WeeklyplaylistEndpoint,
-  BlendplaylistEndpoint,
-  UserIdEndpoint,
-} = require(`../controller/Oauth`);
+const { UserIdEndpoint } = require(`../controller/UserLogin`);
+const { WeeklyplaylistEndpoint } = require(`../controller/Weekly`);
+const { BlendplaylistEndpoint } = require(`../controller/Blend`);
 
-router.get(`/clintToken`, tokenEndpoint);
 router.post(`/UserId`, UserIdEndpoint);
 router.post(`/Weeklyplaylist`, WeeklyplaylistEndpoint);
 router.post(`/blendplaylist`, BlendplaylistEndpoint);
