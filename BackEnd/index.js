@@ -47,7 +47,7 @@ app.use(`/api/v1`, api);
 
 const Start = async () => {
   try {
-    ConnectDB(MONGO_ATLAS);
+   // ConnectDB(MONGO_ATLAS);
     app.listen(port, async () => {
       console.log(`server is running on port ${port}...`);
     });
