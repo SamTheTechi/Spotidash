@@ -12,8 +12,6 @@ const {
 
 const UserIdEndpoint = async (req, res) => {
   let access_token = req.cookies.Userdata;
-  console.log(`working`);
-  console.log(access_token);
   const userId = req.body.id;
   req.session.userId = userId;
 
