@@ -7,7 +7,7 @@ import './Tailwind.css';
 const App = () => {
   return (
     <Routes>
-      <Route path='/login' element={<Login />}></Route>
+      <Route path='/' element={<Login />}></Route>
       <Route path='/dashboard/*' element={<DashboardComp />}></Route>
     </Routes>
   );
