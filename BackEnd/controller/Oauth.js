@@ -5,7 +5,6 @@ const querystring = require('querystring');
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const CALLBACK_URL = process.env.CALLBACK_URL;
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
 let generateRandomString = (length) => {
@@ -29,7 +28,7 @@ const login = async (req, res) => {
         response_type: 'code',
         client_id: CLIENT_ID,
         scope: scope,
-        redirect_uri: `${req.protocol}://${req.get('host')}/${CALLBACK_URL}`,
+        redirect_uri: `${req.protocol}://${req.get('host')}/callback`,
         state: state,
       })
   );
@@ -51,7 +50,7 @@ const callback = async (req, res) => {
       url: 'https://accounts.spotify.com/api/token',
       form: {
         code: code,
-        redirect_uri: `${req.protocol}://${req.get('host')}/${CALLBACK_URL}`,
+        redirect_uri: `${req.protocol}://${req.get('host')}/callback`,
         grant_type: 'authorization_code',
       },
       headers: {
@@ -63,7 +62,6 @@ const callback = async (req, res) => {
           ).toString('base64'),
       },
     };
-
     try {
       const response = await axios.post(authOptions.url, querystring.stringify(authOptions.form), {
         headers: authOptions.headers,
