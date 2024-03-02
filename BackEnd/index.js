@@ -1,6 +1,7 @@
 require(`dotenv`).config();
 require(`express-async-errors`);
 
+const helmet = require(`helmet`);
 const cors = require(`cors`);
 const express = require(`express`);
 const cookie = require(`cookie-parser`);
@@ -15,6 +16,7 @@ const app = express();
 const Oauth = require(`./router/Oauth`);
 const api = require(`./router/Api`);
 
+app.use(helmet());
 app.use(cookie());
 app.use(cors());
 app.use(express.json());

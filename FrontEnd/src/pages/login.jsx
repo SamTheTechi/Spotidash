@@ -1,8 +1,12 @@
 import React, { useEffect } from 'react';
 
 const Login = () => {
+  // const handleClick = () => {
+  //   window.location.href = `https://spotidash-server.vercel.app/login?redirectUrl=${encodeURI(
+  //     window.location.origin
+  //   )}`;
   const handleClick = () => {
-    window.location.href = `https://spotidash-server.vercel.app/login?redirectUrl=${encodeURI(
+    window.location.href = `http://localhost:5000/login?redirectUrl=${encodeURI(
       window.location.origin
     )}`;
   };
