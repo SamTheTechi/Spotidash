@@ -55,9 +55,9 @@ const DiscoverWeekly = () => {
   if (weeklyPlaylistExist === true) {
     return (
       <>
-        <header className=' flex justify-end flex-row h-[10%] w-[100%] pt-10 pr-20 overflow-hidden mb-24'>
+        <header className=' flex justify-end flex-row h-[10%] w-[100%] pr-6 lg:pt-5 lg:pr-12 overflow-hidden mb-12 lg:mb-24'>
           <Link to={`/dashboard`}>
-            <button className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[9rem] h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]'>
+            <button className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[7rem] lg:w-[9rem] h-[2rem] lg:h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]'>
               Go-Back
             </button>
           </Link>
@@ -70,14 +70,14 @@ const DiscoverWeekly = () => {
   } else {
     return (
       <>
-        <header className=' flex justify-end flex-row h-[10%] w-[100%] pt-10 pr-20 overflow-hidden mb-28'>
+        <header className=' flex justify-end flex-row lg:h-[10%] w-[100%] pr-6 lg:pt-5 lg:pr-12 overflow-hidden mb-24 '>
           <Link to={`/dashboard`}>
-            <button className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[9rem] h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]'>
+            <button className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[7rem] lg:w-[9rem] h-[2rem] lg:h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]'>
               Go-Back
             </button>
           </Link>
         </header>
-        <section className=' w-[75%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[30%] flex items-center h-[45%] bg-gray-900 border-2 border-gray-800 rounded-[15px] '>
+        <section className=' w-[75%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[30%] flex items-center h-[40%] pt-5 lg:pt-0 lg:h-[45%] bg-gray-900 border-2 border-gray-800 rounded-[15px] '>
           <form
             onSubmit={handleSubmit}
             className='flex h-[100%] w-[100%] justify-around items-center flex-col'>
@@ -91,7 +91,7 @@ const DiscoverWeekly = () => {
                   name='name'
                   onChange={handleInput}
                   value={NewplaylistData.name}
-                  className=' min-w-[18rem] aspect-[7/1] mt-1.5 pl-2 pr-2 bg-customGray border-[2px] rounded-md border-[rgb(100,100,100)] hover:border-white'
+                  className=' lg:min-w-[18rem] aspect-[7/1] mt-1.5 pl-2 pr-2 bg-customGray border-[2px] rounded-md border-[rgb(100,100,100)] hover:border-white'
                 />
               </label>
               <label className='flex justify-center items-start flex-col p-2'>
@@ -102,12 +102,12 @@ const DiscoverWeekly = () => {
                   name='description'
                   onChange={handleInput}
                   value={NewplaylistData.description}
-                  className=' min-w-[18rem] aspect-[7/1] mt-1.5 pl-2 pr-2 bg-customGray border-[2px] rounded-md border-[rgb(100,100,100)] hover:border-white'
+                  className=' lg:min-w-[18rem] aspect-[7/1] mt-1.5 pl-2 pr-2 bg-customGray border-[2px] rounded-md border-[rgb(100,100,100)] hover:border-white'
                 />
               </label>
             </div>
             <button
-              className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover min-w-[18rem] aspect-[6/1] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)] mb-5'
+              className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover lg:min-w-[18rem] aspect-[6/1] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)] mb-5'
               type='submit'>
               Cleate playlist
             </button>

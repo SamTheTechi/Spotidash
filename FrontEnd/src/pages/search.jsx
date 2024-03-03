@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 const DeepSearch = () => {
   return (
     <>
-      <header className=' flex justify-end flex-row h-[10%] w-[100%] pt-10 pr-20 overflow-hidden mb-1'>
+      <header className=' flex justify-end flex-row lg:h-[10%] w-[100%] pr-6 lg:pt-5 lg:pr-12 overflow-hidden mb-12 lg:mb-24'>
         <Link to={`/dashboard`}>
-          <button className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[9rem] h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]'>
+          <button className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[7rem] lg:w-[9rem] h-[2rem] lg:h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]'>
             Go-Back
           </button>
         </Link>
