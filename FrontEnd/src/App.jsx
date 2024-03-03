@@ -6,12 +6,12 @@ import './Tailwind.css';
 
 const App = () => {
   return ( 
-    <div style={{ touchAction: none overflow : 'hidden' }}>
+    <div style={{ touchAction: 'none' , overflow : 'hidden' }}>
     <Routes>
       <Route path='/' element={<Login />}></Route>
       <Route path='/dashboard/*' element={<DashboardComp />}></Route>
     </Routes>
-      </div>
+    </div>
   );
 };
 
