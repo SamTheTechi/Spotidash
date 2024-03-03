@@ -9,21 +9,17 @@ const Login = () => {
     //   window.location.href = `http://localhost:5000/login?redirectUrl=${encodeURI(
     //     window.location.origin
     //   )}`;
-};
+  };
 
   return (
     <>
       <main className='bg-black text-white overflow-x-hidden h-screen w-screen m-0 p-0  box-border'>
         <header className=' flex justify-start items-start h-[20%] w-[100%] p-5 overflow-hidden'>
-          <img
-            src='https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png'
-            alt=''
-            className='pr-1 h-[1.6rem]'
-          />
-          <h2 className='items-center text-[1rem] font-semibold'>SpotiDash</h2>
+          <img src='/logo.svg' alt='' className='pr-1 h-[2.2rem]' />
+          <h2 className='items-center text-[1.2rem] font-semibold'>SpotiDash</h2>
         </header>
         <article className='pt-[10vh] flex items-center justify-around flex-col h-[40%]'>
-          <section className=' h-[auto] text-3xl font-bold p-5'>
+          <section className=' h-[auto] md:text-3xl text-2xl font-bold p-5'>
             Login to Countinue <br /> to SpotiDash
           </section>
           <section className=' h-[auto]'>

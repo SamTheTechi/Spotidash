@@ -85,15 +85,15 @@ const SongLayer = ({ imgUrl, Name, Artist, handlePreviewSong }) => {
     <>
       <article
         onClick={handlePreviewSong}
-        className='p-1.5 pb-3 flex hover:scale-[1.03] hover:text-black  transition duration-150 ease-in cursor-pointer'>
+        className='p-1 sm:pb-3 pb-2 flex hover:scale-[1.03] hover:text-black transition duration-150 ease-in cursor-pointer'>
         <img
           src={imgUrl}
           alt={Name}
-          className=' aspect-square h-[64px] rounded-[8px] shadow-customShadow hover:opacity-90 transition duration-200 ease-in'
+          className=' aspect-square sm:h-[64px] h-[38px] rounded-[8px] shadow-customShadow hover:opacity-90 transition duration-200 ease-in'
         />
-        <div className='flex flex-col p-1 pl-2 justify-around'>
-          <div className=' text-base'>{Name}</div>
-          <div className='font-thin text-xs'>{Artist}</div>
+        <div className='flex flex-col p-0 sm:p-1 sm:pl-2 pl-1 justify-around'>
+          <div className='text-xs sm:text-base'>{Name}</div>
+          <div className='font-thin hidden text-sm sm:block'>{Artist}</div>
         </div>
       </article>
     </>
