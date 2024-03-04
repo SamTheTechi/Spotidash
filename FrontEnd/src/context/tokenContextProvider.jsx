@@ -3,14 +3,9 @@ import { TokenContext } from './Context';
 
 const TokenContextProvider = ({ children }) => {
   const [token, setToken] = useState(null);
+
   useEffect(() => {
-    setToken(
-      window.location.search.split(`=`)[1] ||
-        document.cookie
-          .split('; ')
-          .find((row) => row.startsWith('Userdata'))
-          ?.split('=')[1]
-    );
+    setToken(sessionStorage.getItem('Token'));
   }, [token]);
 
   return (

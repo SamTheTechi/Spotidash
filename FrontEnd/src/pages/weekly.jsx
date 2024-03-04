@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { PlaylistContext } from '../context/Context';
 import { Link } from 'react-router-dom';
-const baseURL = 'http://localhost:5000/api/v1/weeklyplaylist';
+const weeklyEndpoint = `${import.meta.env.VITE_OAUTH}/api/v1/weeklyplaylist/id`;
 
 const DiscoverWeekly = () => {
   const { userPlaylist } = useContext(PlaylistContext);
@@ -12,6 +12,8 @@ const DiscoverWeekly = () => {
     name: '',
     description: '',
     weeklyPlaylistId: '',
+    access_token: sessionStorage.getItem('Token'),
+    userID: sessionStorage.getItem('UserID'),
   });
 
   useEffect(() => {
@@ -41,7 +43,7 @@ const DiscoverWeekly = () => {
     }
     const postPlaylistData = async () => {
       try {
-        await axios.post(baseURL, NewplaylistData);
+        await axios.post(weeklyEndpoint, NewplaylistData);
       } catch (e) {
         throw e;
       }
@@ -70,7 +72,7 @@ const DiscoverWeekly = () => {
   } else {
     return (
       <>
-        <header className=' flex justify-end flex-row lg:h-[10%] w-[100%] pr-6 lg:pt-5 lg:pr-12 overflow-hidden mb-24 '>
+        <header className=' flex justify-end flex-row lg:h-[10%] w-[100%] pr-6 lg:pt-5 lg:pr-12 overflow-hidden mb-20 '>
           <Link to={`/dashboard`}>
             <button className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover w-[7rem] lg:w-[9rem] h-[2rem] lg:h-[2.5rem] rounded-[30px] border-[5px] border-[rgba(0,0,0,0.2)]'>
               Go-Back

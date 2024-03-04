@@ -28,7 +28,7 @@ const TopArtist = () => {
   return (
     <>
       <div
-        className={`flex flex-col ml-1.5 bg-green-600 overflow-auto w-[40%] rounded-[15px] scrollbar-hide border-[5px] border-[rgba(0,0,0,0.1)] hover:shadow-customWhiteShadow`}>
+        className={`flex flex-col ml-[2px] bg-green-600 overflow-auto w-[40%] rounded-[15px] overflow-x-hidden border-[5px] border-[rgba(0,0,0,0.1)] hover:shadow-customWhiteShadow`}>
         {data.map((items) => {
           let key = items.id;
           let Name = items.name;
@@ -60,7 +60,7 @@ const ArtistLayer = ({ imgUrl, Name, Genres, ArtistUrl }) => {
     <>
       <article
         onClick={handleClick}
-        className='p-1 sm:pb-3 pb-2 flex hover:scale-[1.03] hover:text-black hover:underline transition duration-150 ease-in cursor-pointer'>
+        className='p-1 sm:pb-3 pb-2 flex hover:scale-[1.03] hover:text-black hover:underline transition duration-150 ease-in cursor-pointer '>
         <img
           src={imgUrl}
           alt={Name}
