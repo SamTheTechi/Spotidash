@@ -50,7 +50,7 @@ const TopSongs = () => {
   return (
     <>
       <section
-        className={`flex flex-col ml-1.5 mr-1.5 bg-orange-600 overflow-auto w-[60%] rounded-[15px] scrollbar-hide border-[5px] border-[rgba(0,0,0,0.1)] hover:shadow-customWhiteShadow`}>
+        className={`flex flex-col sm:ml-1.5 ml-1 sm:mr-1.5 mr-1 bg-orange-600 overflow-auto w-[60%] overflow-x-hidden rounded-[15px] scrolll border-[5px] border-[rgba(0,0,0,0.1)] hover:shadow-customWhiteShadow`}>
         <audio ref={audioRef} src={song}></audio>
         {data.map((items) => {
           let imgUrl = items.album.images.find((item) => item.height === 64).url;

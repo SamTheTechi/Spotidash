@@ -6,6 +6,7 @@ const baseURL = 'http://localhost:5000/api/v1/UserId';
 const Navbar = () => {
   const { token } = useContext(TokenContext);
   const [userID, setUserID] = useState(null);
+  const [variable, setVariable] = useState(true);
   const [userInfo, setUserInfo] = useState('');
 
   useEffect(() => {
@@ -24,6 +25,11 @@ const Navbar = () => {
       }
     };
     userInfo();
+    if (variable) {
+      let access_token = window.location.search.split(`=`)[1];
+      sessionStorage.setItem('Token', access_token);
+      setVariable(false);
+    }
   }, [token]);
 
   useEffect(() => {
@@ -35,8 +41,9 @@ const Navbar = () => {
         throw e;
       }
     };
+    sessionStorage.setItem('UserID', userID);
     newUser();
-  }, [userID]);
+  }, [userInfo]);
 
   return (
     <header className=' flex justify-between flex-row h-[10%] w-[100%] pt-4 pl-5 pr-4 md:pr-16 overflow-hidden font-semibold'>

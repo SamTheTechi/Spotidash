@@ -1,6 +1,4 @@
 require(`dotenv`).config();
-
-const axios = require(`axios`);
 const Database = require(`../model/User`);
 
 const {
@@ -11,19 +9,21 @@ const {
 } = require('../lib/SpotiFunc');
 
 const WeeklyplaylistEndpoint = async (req, res) => {
-  let access_token = req.session.access_token;
   try {
     const Name = await req.body.name;
     const Description = await req.body.description;
     const weeklyPlaylistId = await req.body.weeklyPlaylistId;
+    const access_token = await req.body.access_token;
+    const userID = await req.body.userID;
+    console.log(userID);
 
     const PlaylistExist = await Database.findOne({
-      UserKey: userId,
+      UserKey: userID,
       'Weekly.Exist': false,
     });
 
     const weeklyPlaylistExist = await Database.findOne({
-      UserKey: userId,
+      UserKey: userID,
       'Weekly.Exist': true,
     });
 
@@ -33,14 +33,14 @@ const WeeklyplaylistEndpoint = async (req, res) => {
       .map((item) => item.id)[0];
 
     if (PlaylistExist || !PlaylistExistID) {
-      const newWeeklyPlaylist = await Createplaylist(Name, Description, userId, access_token);
-      console.log(`new playlist created for user ${userId}`);
+      const newWeeklyPlaylist = await Createplaylist(Name, Description, userID, access_token);
+      console.log(`new playlist created for user ${userID}`);
 
       const PlaylistSongs = await FetchSongs(weeklyPlaylistId, 50, 0, access_token);
 
       await Database.findOneAndUpdate(
         {
-          UserKey: userId,
+          UserKey: userID,
           'Weekly.Exist': true,
         },
         {
@@ -52,7 +52,7 @@ const WeeklyplaylistEndpoint = async (req, res) => {
 
       await Database.findOneAndUpdate(
         {
-          UserKey: userId,
+          UserKey: userID,
           'Weekly.Exist': false,
         },
         {

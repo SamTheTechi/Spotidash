@@ -8,8 +8,8 @@ import Search from '../components/search';
 const Dashboard = () => {
   return (
     <>
-      <section className='w-[95%] sm:w-[90%] md:w-[80%] lg:w-[65%] xl:w-[50%] flex items-center h-[50%] sm:h-[80%] sm:mt-0 mt-24 transition duration-400 ease-out'>
-        <article className='w-[33%] h-[100%] grid grid-rows-3 ml-1 mt-3 mr-1'>
+      <section className='w-[97%] sm:w-[90%] md:w-[80%] lg:w-[65%] xl:w-[50%] flex items-center h-[55%] sm:h-[80%] sm:mt-0 mt-24 transition duration-400 ease-out'>
+        <article className='w-[33%] h-[100%] grid grid-rows-3 sm:ml-1 sm:mr-1 mt-3'>
           <Blend />
           <Weekly />
           <Search />
