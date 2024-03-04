@@ -7,8 +7,9 @@ import UserPlaylistProvider from './context/userPlaylistProvider';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <SpeedInsights>
+  <>
+    <SpeedInsights />
+    <React.StrictMode>
       <TokenContextProvider>
         <UserPlaylistProvider>
           <BrowserRouter>
@@ -16,6 +17,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           </BrowserRouter>
         </UserPlaylistProvider>
       </TokenContextProvider>
-    </SpeedInsights>
-  </React.StrictMode>
+    </React.StrictMode>
+  </>
 );
