@@ -36,7 +36,7 @@ const Navbar = () => {
   useEffect(() => {
     const newUser = async () => {
       try {
-        await axios.post(`${import.meta.env.VITE_OAUTH}api/v1/UserId`, {
+        await axios.post(`https://spotidash-server.vercel.app/api/v1/UserId`, {
           userID: userID,
           userName: userName,
           access_token: localStorage.getItem('Token'),

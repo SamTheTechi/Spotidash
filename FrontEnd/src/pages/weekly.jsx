@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { PlaylistContext } from '../context/Context';
 import { Link } from 'react-router-dom';
-const weeklyEndpoint = `${import.meta.env.VITE_OAUTH}api/v1/weeklyplaylist`;
+const weeklyEndpoint = `https://spotidash-server.vercel.app/api/v1/weeklyplaylist`;
 
 const DiscoverWeekly = () => {
   const { userPlaylist } = useContext(PlaylistContext);
