@@ -1,12 +1,8 @@
 import React, { useEffect } from 'react';
 
 const Login = () => {
-  // const handleClick = () => {
-  //   window.location.href = `${import.meta.env.VITE_OAUTH}/login?redirectUrl=${encodeURI(
-  //     window.location.origin
-  //   )}`;
   const handleClick = () => {
-    window.location.href = `https://spotidash-server.vercel.app/login?redirectUrl=${encodeURI(
+    window.location.href = `${import.meta.env.VITE_OAUTH}login?redirectUrl=${encodeURI(
       window.location.origin
     )}`;
   };

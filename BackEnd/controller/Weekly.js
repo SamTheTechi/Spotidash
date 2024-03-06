@@ -1,5 +1,5 @@
 require(`dotenv`).config();
-const Database = require(`../model/User`);
+const Database = require(`../model/UserInfo`);
 
 const {
   Createplaylist,
@@ -18,18 +18,18 @@ const WeeklyplaylistEndpoint = async (req, res) => {
     console.log(userID);
 
     const PlaylistExist = await Database.findOne({
-      UserKey: userID,
-      'Weekly.Exist': false,
+      userKey: userID,
+      'weekly.exist': false,
     });
 
     const weeklyPlaylistExist = await Database.findOne({
-      UserKey: userID,
-      'Weekly.Exist': true,
+      userKey: userID,
+      'weekly.exist': true,
     });
 
     const val = await FetchAllUserPlaylist(access_token);
     const PlaylistExistID = await val
-      .filter((items) => items.id === weeklyPlaylistExist?.Weekly.PlaylistID)
+      .filter((items) => items.id === weeklyPlaylistExist?.weekly.playlistID)
       .map((item) => item.id)[0];
 
     if (PlaylistExist || !PlaylistExistID) {
@@ -40,26 +40,26 @@ const WeeklyplaylistEndpoint = async (req, res) => {
 
       await Database.findOneAndUpdate(
         {
-          UserKey: userID,
-          'Weekly.Exist': true,
+          userKey: userID,
+          'weekly.exist': true,
         },
         {
           $set: {
-            'Weekly.PlaylistID': newWeeklyPlaylist,
+            'weekly.playlistID': newWeeklyPlaylist,
           },
         }
       );
 
       await Database.findOneAndUpdate(
         {
-          UserKey: userID,
-          'Weekly.Exist': false,
+          userKey: userID,
+          'weekly.exist': false,
         },
         {
           $set: {
-            'Weekly.Exist': true,
-            'Weekly.WeeklyID': weeklyPlaylistId,
-            'Weekly.PlaylistID': newWeeklyPlaylist,
+            'weekly.exist': true,
+            'weekly.weeklyID': weeklyPlaylistId,
+            'weekly.playlistID': newWeeklyPlaylist,
           },
         }
       );

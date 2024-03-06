@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { TokenContext } from '../context/Context';
-const baseURL = 'http://localhost:5000/api/v1/UserId';
 
 const Navbar = () => {
   const { token } = useContext(TokenContext);
   const [userID, setUserID] = useState(null);
+  const [userName, setUserName] = useState(null);
   const [variable, setVariable] = useState(true);
   const [userInfo, setUserInfo] = useState('');
 
@@ -20,6 +20,7 @@ const Navbar = () => {
         const resData = response.data;
         setUserInfo(resData);
         setUserID(resData.id);
+        setUserName(resData.display_name);
       } catch (e) {
         throw e;
       }
@@ -27,7 +28,7 @@ const Navbar = () => {
     userInfo();
     if (variable) {
       let access_token = window.location.search.split(`=`)[1];
-      sessionStorage.setItem('Token', access_token);
+      localStorage.setItem('Token', access_token);
       setVariable(false);
     }
   }, [token]);
@@ -35,13 +36,17 @@ const Navbar = () => {
   useEffect(() => {
     const newUser = async () => {
       try {
-        await axios.post(baseURL, { id: userID });
+        await axios.post(`${import.meta.env.VITE_OAUTH}api/v1/UserId`, {
+          userID: userID,
+          userName: userName,
+          access_token: localStorage.getItem('Token'),
+        });
         setSignal(false);
       } catch (e) {
         throw e;
       }
     };
-    sessionStorage.setItem('UserID', userID);
+    localStorage.setItem('UserID', userID);
     newUser();
   }, [userInfo]);
 

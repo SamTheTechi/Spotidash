@@ -4,11 +4,10 @@ require(`express-async-errors`);
 const helmet = require(`helmet`);
 const cors = require(`cors`);
 const express = require(`express`);
-const cookie = require(`cookie-parser`);
 
 const port = process.env.PORT || process.env.LOCALPORT;
 const MONGO_ATLAS = process.env.MONGO_ATLAS;
-const MONGO_URL = process.env.Mongo_URL;
+const MONGO_URL = process.env.MONGO_URL;
 
 const ConnectDB = require(`./DB/connect`);
 const app = express();
@@ -17,7 +16,6 @@ const Oauth = require(`./router/Oauth`);
 const api = require(`./router/Api`);
 
 app.use(helmet());
-app.use(cookie());
 app.use(cors());
 app.use(express.json());
 
