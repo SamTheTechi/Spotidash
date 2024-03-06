@@ -79,7 +79,7 @@ const DiscoverWeekly = () => {
             </button>
           </Link>
         </header>
-        <section className=' w-[75%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[30%] flex items-center h-[40%] pt-5 lg:pt-0 lg:h-[45%] bg-gray-900 border-2 border-gray-800 rounded-[15px] '>
+        <section className=' w-[75%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[30%] flex items-center h-[40%] pt-5 lg:pt-0 lg:h-[45%] bg-[rgba(17,24,39,0.2)] border-2 border-[rgba(31,41,55,0.5)] rounded-[15px] '>
           <form
             onSubmit={handleSubmit}
             className='flex h-[100%] w-[100%] justify-around items-center flex-col'>

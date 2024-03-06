@@ -82,7 +82,7 @@ const AddSongsIntoPlaylist = async (songs, PlaylistId, access_token) => {
         );
 
         let track = item.split(':')[2];
-        await new Promise((resolve) => setTimeout(resolve, 50));
+        await new Promise((resolve) => setTimeout(resolve, 35));
       } catch (e) {
         console.error(`Error adding track: ${e.message}`);
       }
