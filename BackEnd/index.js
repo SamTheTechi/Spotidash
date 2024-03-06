@@ -6,8 +6,8 @@ const cors = require(`cors`);
 const express = require(`express`);
 
 const port = process.env.PORT || process.env.LOCALPORT;
-const MONGO_ATLAS = process.env.MONGO_ATLAS;
-const MONGO_URL = process.env.MONGO_URL;
+// const MONGO_ATLAS = process.env.MONGO_ATLAS;
+// const MONGO_URL = process.env.MONGO_URL;
 
 const ConnectDB = require(`./DB/connect`);
 const app = express();
@@ -24,7 +24,7 @@ app.use(`/api/v1`, api);
 
 const Start = async () => {
   try {
-    ConnectDB(MONGO_ATLAS);
+    ConnectDB(MONGODB_URI);
     app.listen(port, async () => {
       console.log(`server is running on port ${port}...`);
     });
