@@ -1,7 +1,7 @@
 require(`dotenv`).config();
 
 const axios = require(`axios`);
-const Database = require(`../model/User`);
+const Database = require(`../model/UserInfo`);
 
 const {
   Createplaylist,

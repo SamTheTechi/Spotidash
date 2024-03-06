@@ -5,7 +5,7 @@ const TokenContextProvider = ({ children }) => {
   const [token, setToken] = useState(null);
 
   useEffect(() => {
-    setToken(sessionStorage.getItem('Token'));
+    setToken(localStorage.getItem('Token'));
   }, [token]);
 
   return (
