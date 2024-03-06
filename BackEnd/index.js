@@ -8,6 +8,7 @@ const express = require(`express`);
 const port = process.env.PORT || process.env.LOCALPORT;
 // const MONGO_ATLAS = process.env.MONGO_ATLAS;
 // const MONGO_URL = process.env.MONGO_URL;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 const ConnectDB = require(`./DB/connect`);
 const app = express();
