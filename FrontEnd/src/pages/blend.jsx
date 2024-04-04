@@ -130,13 +130,7 @@ const FilterBlend = () => {
   }
 };
 
-const SelectPlatlist = ({
-  playlistName,
-  playlistImage,
-  playlistIds,
-  setSelectedItems,
-  selectedList,
-}) => {
+const SelectPlatlist = ({ playlistName, playlistImage, playlistIds, setSelectedItems, selectedList }) => {
   const [cheakBox, setCheakBox] = useState(false);
 
   const handleSwitch = (e) => {
@@ -145,16 +139,14 @@ const SelectPlatlist = ({
 
     setSelectedItems((prev) => ({
       ...prev,
-      [selectedList]: checked
-        ? [...prev[selectedList], id]
-        : prev[selectedList].filter((item) => item !== id),
+      [selectedList]: checked ? [...prev[selectedList], id] : prev[selectedList].filter((item) => item !== id),
     }));
   };
 
   return (
     <>
       <label
-        className={`text-sm md:text-base lg:text-lg p-1 pt-2 pb-2 mt-2 flex flex-row items-center shadow-customShadow transition ease-out duration-100 sp tracking-tight lg:tracking-normal ${
+        className={`text-sm md:text-base lg:text-lg p-1 pt-2 pb-2 mt-2 flex flex-row items-center shadow-customShadow transition ease-out duration-100 tracking-tight lg:tracking-normal ${
           cheakBox
             ? ` border-gray-600 bg-[rgba(0,0,0,0.2)] text-gray-400 scale-[0.95]`
             : ` border-gray-500  bg-[rgba(255,252,252,0.1)] hover:scale-[1.05] hover:text-gray-900`
@@ -166,13 +158,7 @@ const SelectPlatlist = ({
           className='h-[2.5rem] md:h-[3rem] lg:h-[3.5rem] w-[2.5rem] md:w-[3rem] lg:w-[3.5rem] rounded-[8px] shadow-customShadow'
         />
         <h4 className='pl-2'>{playlistName}</h4>
-        <input
-          type='checkbox'
-          id={playlistIds}
-          checked={cheakBox}
-          onChange={handleSwitch}
-          className='hidden'
-        />
+        <input type='checkbox' id={playlistIds} checked={cheakBox} onChange={handleSwitch} className='hidden' />
       </label>
     </>
   );
