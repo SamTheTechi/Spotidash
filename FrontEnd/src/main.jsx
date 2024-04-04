@@ -4,6 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import TokenContextProvider from './context/tokenContextProvider';
 import UserPlaylistProvider from './context/userPlaylistProvider';
+import TimeRangeProvider from './context/timeRange';
+
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -12,9 +14,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
       <TokenContextProvider>
         <UserPlaylistProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <TimeRangeProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </TimeRangeProvider>
         </UserPlaylistProvider>
       </TokenContextProvider>
     </React.StrictMode>

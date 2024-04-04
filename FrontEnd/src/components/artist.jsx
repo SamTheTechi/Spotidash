@@ -1,21 +1,19 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react';
 import axios from 'axios';
-import { TokenContext } from '../context/Context';
+import { TokenContext, TimeRangeContext } from '../context/Context';
 
 const TopArtist = () => {
+  const { range } = useContext(TimeRangeContext);
   const { token } = useContext(TokenContext);
   const [data, setData] = useState([]);
 
   const Artist = useMemo(() => async () => {
     try {
-      const response = await axios.get(
-        `https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=20`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`https://api.spotify.com/v1/me/top/artists?time_range=${range}_term&limit=25`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const res = response.data.items;
       setData(res);
     } catch (e) {}
@@ -23,12 +21,12 @@ const TopArtist = () => {
 
   useEffect(() => {
     Artist();
-  }, [token]);
+  }, [token, range]);
 
   return (
     <>
       <div
-        className={`flex flex-col ml-[2px] bg-green-600 overflow-auto w-[42%] rounded-[15px] overflow-x-hidden border-[3px] sm:border-[5px] border-[rgba(0,0,0,0.1)] hover:shadow-customWhiteShadow`}>
+        className={`flex flex-col sm:m-1.5 m-1 bg-green-600 overflow-auto w-[42%] rounded-[15px] overflow-x-hidden border-[3px] sm:border-[5px] border-[rgba(0,0,0,0.1)] `}>
         {data.map((items) => {
           let key = items.id;
           let Name = items.name;
@@ -36,15 +34,7 @@ const TopArtist = () => {
           let Genres = items.genres.map((genre) => genre.name).join(', ');
           let ArtistUrl = items.external_urls.spotify;
 
-          return (
-            <ArtistLayer
-              key={key}
-              Name={Name}
-              imgUrl={imgUrl}
-              Genres={Genres}
-              ArtistUrl={ArtistUrl}
-            />
-          );
+          return <ArtistLayer key={key} Name={Name} imgUrl={imgUrl} Genres={Genres} ArtistUrl={ArtistUrl} />;
         })}
       </div>
     </>

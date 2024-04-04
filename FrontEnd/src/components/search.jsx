@@ -5,7 +5,7 @@ import axios from 'axios';
 const Search = () => {
   return (
     <>
-      <div className='sm:border-[5px] border-[3px] hover:shadow-customWhiteShadow border-[rgba(0,0,0,0.1)] rounded-[15px]  flex justify-center items-center overflow-hidden sm:m-1.5 m-1 bg-yellow-600'>
+      <div className='sm:border-[5px] border-[3px] border-[rgba(0,0,0,0.1)] rounded-[15px]  flex justify-center items-center overflow-hidden sm:mt-1.5 mt-1 sm:ml-1.5 ml-1 sm:mr-1.5 mr-1 bg-yellow-600'>
         <Link to={`search`}>
           <img
             src={`/Search.jpg`}

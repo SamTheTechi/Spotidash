@@ -1,29 +1,27 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import axios from 'axios';
-import { TokenContext } from '../context/Context';
+import { TokenContext, TimeRangeContext } from '../context/Context';
 
 const TopSongs = () => {
+  const { range } = useContext(TimeRangeContext);
   const { token } = useContext(TokenContext);
   const [data, setData] = useState([]);
 
   useEffect(() => {
     const Tracks = async () => {
       try {
-        const response = await axios.get(
-          `https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=30`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=${range}_term&limit=40`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const res = response.data.items;
         setData(res);
       } catch (e) {}
     };
     Tracks();
     audioRef.current.volume = 0.4;
-  }, [token]);
+  }, [token, range]);
 
   const [song, setSong] = useState(null);
   const [playing, setPlaying] = useState(false);
@@ -50,7 +48,7 @@ const TopSongs = () => {
   return (
     <>
       <section
-        className={`flex flex-col sm:ml-1.5 ml-1 sm:mr-1.5 mr-1 bg-orange-600 overflow-auto w-[58%] overflow-x-hidden rounded-[15px] border-[3px] sm:border-[5px] border-[rgba(0,0,0,0.1)] hover:shadow-customWhiteShadow`}>
+        className={`flex flex-col sm:m-1.5 m-1 bg-orange-600 overflow-auto w-[58%] overflow-x-hidden rounded-[15px] border-[3px] sm:border-[5px] border-[rgba(0,0,0,0.1)] `}>
         <audio ref={audioRef} src={song}></audio>
         {data.map((items) => {
           let imgUrl = items.album.images.find((item) => item.height === 64).url;
