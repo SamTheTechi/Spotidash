@@ -1,6 +1,7 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
 const TokenContext = createContext();
 const PlaylistContext = createContext();
+const TimeRangeContext = createContext();
 
-export { TokenContext, PlaylistContext };
+export { TokenContext, PlaylistContext, TimeRangeContext };

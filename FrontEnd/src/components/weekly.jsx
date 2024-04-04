@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const Weekly = () => {
   return (
     <>
-      <div className='sm:border-[5px] border-[3px] border-[rgba(0,0,0,0.1)] rounded-[15px]  flex justify-center items-center overflow-hidden sm:m-1.5 m-1  hover:shadow-customWhiteShadow bg-pink-400'>
+      <div className='sm:border-[5px] border-[3px] border-[rgba(0,0,0,0.1)] rounded-[15px]  flex justify-center items-center overflow-hidden sm:m-1.5 m-1 bg-pink-400'>
         <Link to={`weekly`}>
           <img
             src={`/Weekly.jpg`}
