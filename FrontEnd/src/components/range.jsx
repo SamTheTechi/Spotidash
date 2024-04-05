@@ -15,7 +15,7 @@ const Player = () => {
     return (
       <button
         onClick={handleButtonClick}
-        className={`h-[75%] w-[29%] rounded-[28px] border-[2px] sm:border-[4px] border-[rgba(0,0,0,0.15)] shadow-customShadow transition ease-out duration-100 
+        className={`h-[75%] w-[29%] rounded-[15px] border-[2px] sm:border-[4px] border-[rgba(0,0,0,0.15)] shadow-customShadow transition ease-out duration-100 
         ${range === value ? ' scale-[1.05]  bg-[rgba(0,0,0,0.3)] ' : 'scale-[0.95]  bg-[rgba(0,0,0,0.1)]'}`}
         dangerouslySetInnerHTML={{ __html: display_name }}></button>
     );
