@@ -62,13 +62,36 @@ const FetchSongs = async (PlaylistId, limit, offset, access_token) => {
 
 const AddSongsIntoPlaylist = async (songs, PlaylistId, access_token) => {
   try {
+    let batch = [];
     for (const item of songs) {
-      if (!item) {
-        continue;
+      if (item) {
+        batch.push(item);
       }
-
+      if (batch.length >= 30) {
+        try {
+          await axios.post(
+            `https://api.spotify.com/v1/playlists/${PlaylistId}/tracks`,
+            {
+              uris: [item],
+              position: 0,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${access_token}`,
+              },
+            }
+          );
+          await new Promise((resolve) => setTimeout(resolve, 50));
+          batch = [];
+          console.log(`adding batch`);
+        } catch (e) {
+          console.error(`Error adding track: ${e.message}`);
+        }
+      }
+    }
+    if (batch.length > 0) {
       try {
-        let response = await axios.post(
+        await axios.post(
           `https://api.spotify.com/v1/playlists/${PlaylistId}/tracks`,
           {
             uris: [item],
@@ -80,9 +103,8 @@ const AddSongsIntoPlaylist = async (songs, PlaylistId, access_token) => {
             },
           }
         );
-
-        let track = item.split(':')[2];
         await new Promise((resolve) => setTimeout(resolve, 50));
+        batch = [];
       } catch (e) {
         console.error(`Error adding track: ${e.message}`);
       }
@@ -91,6 +113,35 @@ const AddSongsIntoPlaylist = async (songs, PlaylistId, access_token) => {
     console.error(`Error in AddSongs function: ${e.message}`);
   }
 };
+
+// const AddSongsIntoPlaylist = async (songs, PlaylistId, access_token) => {
+//   try {
+//     for (const item of songs) {
+//       if (!item) {
+//         continue;
+//       }
+//       try {
+//         await axios.post(
+//           `https://api.spotify.com/v1/playlists/${PlaylistId}/tracks`,
+//           {
+//             uris: [item],
+//             position: 0,
+//           },
+//           {
+//             headers: {
+//               Authorization: `Bearer ${access_token}`,
+//             },
+//           }
+//         );
+//         await new Promise((resolve) => setTimeout(resolve, 50));
+//       } catch (e) {
+//         console.error(`Error adding track: ${e.message}`);
+//       }
+//     }
+//   } catch (e) {
+//     console.error(`Error in AddSongs function: ${e.message}`);
+//   }
+// };
 
 module.exports = {
   Createplaylist,
