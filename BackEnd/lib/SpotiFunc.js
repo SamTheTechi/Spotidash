@@ -72,7 +72,7 @@ const AddSongsIntoPlaylist = async (songs, PlaylistId, access_token) => {
           await axios.post(
             `https://api.spotify.com/v1/playlists/${PlaylistId}/tracks`,
             {
-              uris: [item],
+              uris: batch,
               position: 0,
             },
             {
@@ -94,7 +94,7 @@ const AddSongsIntoPlaylist = async (songs, PlaylistId, access_token) => {
         await axios.post(
           `https://api.spotify.com/v1/playlists/${PlaylistId}/tracks`,
           {
-            uris: [item],
+            uris: batch,
             position: 0,
           },
           {
