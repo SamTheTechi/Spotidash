@@ -41,7 +41,6 @@ const Navbar = () => {
           userName: userName,
           access_token: localStorage.getItem('Token'),
         });
-        setSignal(false);
       } catch (e) {
         throw e;
       }
@@ -56,7 +55,10 @@ const Navbar = () => {
         <img src='/logo.svg' alt='logo' className='h-8 md:h-10 pr-2' />
         <h2 className='items-center text-lg md:text-xl text-customLightGray font-semibold'>
           Welcome,
-          <span className='md:text-2xl text:xl text-white'> {userInfo.display_name} </span>
+          <span className='md:text-2xl text:xl text-white'>
+            {' '}
+            {userInfo.display_name}{' '}
+          </span>
           <span className='text-base'>({userInfo.country})</span>
         </h2>
       </div>
