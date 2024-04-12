@@ -16,7 +16,9 @@ const Createplaylist = async (Name, Description, UserID, access_token) => {
     );
     const val = await FetchAllUserPlaylist(access_token);
     return (data = val
-      .filter((items) => items.name === Name || items.description === Description)
+      .filter(
+        (items) => items.name === Name || items.description === Description
+      )
       .map((item) => item.id)[0]);
   } catch (e) {
     console.log(`error while creating New playlist`, e);
@@ -25,11 +27,14 @@ const Createplaylist = async (Name, Description, UserID, access_token) => {
 
 const FetchAllUserPlaylist = async (access_token) => {
   try {
-    const response = await axios.get('https://api.spotify.com/v1/me/playlists', {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
+    const response = await axios.get(
+      'https://api.spotify.com/v1/me/playlists',
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
     let data = response.data.items;
     return data;
   } catch (e) {
@@ -65,7 +70,7 @@ const AddSongsIntoPlaylist = async (songs, PlaylistId, access_token) => {
     let batch = [];
     for (const item of songs) {
       if (item) {
-        batch.push(item);
+        batch.unshift(item);
       }
       if (batch.length >= 30) {
         try {
