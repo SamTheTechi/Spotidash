@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useContext, useMemo } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { PlaylistContext, TokenContext } from '../context/Context';
 import { Link } from 'react-router-dom';
-const baseURL = 'http://localhost:5000/api/v1/blendplaylist';
+const blendEndpoint =
+  'https://spotidash-server.vercel.app/api/v1/blendplaylist';
 
 const FilterBlend = () => {
   const { token } = useContext(TokenContext);
@@ -17,14 +18,19 @@ const FilterBlend = () => {
 
   useEffect(() => {
     const blendIds = userPlaylist.filter(
-      (item) => item.description.slice(2, 7) === `Blend` && item.owner.display_name === `Spotify`
+      (item) =>
+        item.description.slice(2, 7) === `Blend` &&
+        item.owner.display_name === `Spotify`
     );
     setSelectedBlends(blendIds);
     const notBlendIds = userPlaylist.filter((item) => {
       if (item.owner.display_name === `Spotify`) {
         return item.description.slice(2, 7) !== `Blend`;
       } else {
-        return item.description.slice(2, 7) !== `Blend` && item.owner.display_name !== `Spotify`;
+        return (
+          item.description.slice(2, 7) !== `Blend` &&
+          item.owner.display_name !== `Spotify`
+        );
       }
     });
     setSeletedFilter(notBlendIds);
@@ -38,7 +44,7 @@ const FilterBlend = () => {
     }
     const postPlaylistData = async () => {
       try {
-        await axios.post(baseURL, selectedItems);
+        await axios.post(blendEndpoint, selectedItems);
       } catch (e) {
         throw e;
       }
@@ -62,7 +68,9 @@ const FilterBlend = () => {
         <section className='flex items-center justify-center w-[75%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[30%] h-[55%]'>
           <div className='flex flex-col text-4xl'>
             Playlist Added!
-            <span className=' text-lg text-center mt-1'>might take a few while</span>
+            <span className=' text-lg text-center mt-1'>
+              might take a few while
+            </span>
           </div>
         </section>
       </>
@@ -98,27 +106,6 @@ const FilterBlend = () => {
               })}
             </form>
           </article>
-          <article
-            className={` bg-purple-800 p-2 h-[100%] w-[50%] rounded-[15px] mr-2 overflow-auto scrollbar-hide border-[5px] border-[rgba(0,0,0,0.2)] scrollbar-thumb-black`}>
-            <form>
-              {/* <SelectPlatlist key={} playlistImage={} playlistName={}/> */}
-              {seletedFilter.map((items) => {
-                let Name = items.name;
-                let imgUrl = items.images[0]?.url;
-                let Key = items.id;
-                return (
-                  <SelectPlatlist
-                    key={Key}
-                    playlistImage={imgUrl}
-                    playlistName={Name}
-                    playlistIds={Key}
-                    setSelectedItems={setSelectedItems}
-                    selectedList='filterlist'
-                  />
-                );
-              })}
-            </form>
-          </article>
         </section>
         <button
           className='text-black font-semibold bg-custonmGreen hover:bg-custonmGreenHover lg:min-w-[25rem] aspect-[8/1] rounded-[30px] pt-[-80px] border-[5px] border-[rgba(0,0,0,0.2)] mt-[5vh] '
@@ -130,7 +117,13 @@ const FilterBlend = () => {
   }
 };
 
-const SelectPlatlist = ({ playlistName, playlistImage, playlistIds, setSelectedItems, selectedList }) => {
+const SelectPlatlist = ({
+  playlistName,
+  playlistImage,
+  playlistIds,
+  setSelectedItems,
+  selectedList,
+}) => {
   const [cheakBox, setCheakBox] = useState(false);
 
   const handleSwitch = (e) => {
@@ -139,7 +132,9 @@ const SelectPlatlist = ({ playlistName, playlistImage, playlistIds, setSelectedI
 
     setSelectedItems((prev) => ({
       ...prev,
-      [selectedList]: checked ? [...prev[selectedList], id] : prev[selectedList].filter((item) => item !== id),
+      [selectedList]: checked
+        ? [...prev[selectedList], id]
+        : prev[selectedList].filter((item) => item !== id),
     }));
   };
 
@@ -150,7 +145,7 @@ const SelectPlatlist = ({ playlistName, playlistImage, playlistIds, setSelectedI
           cheakBox
             ? ` border-gray-600 bg-[rgba(0,0,0,0.2)] text-gray-400 scale-[0.95]`
             : ` border-gray-500  bg-[rgba(255,252,252,0.1)] hover:scale-[1.05] hover:text-gray-900`
-        } 
+        }
         border-4 rounded-[12px] mb-2 `}>
         <img
           src={playlistImage}
@@ -158,27 +153,16 @@ const SelectPlatlist = ({ playlistName, playlistImage, playlistIds, setSelectedI
           className='h-[2.5rem] md:h-[3rem] lg:h-[3.5rem] w-[2.5rem] md:w-[3rem] lg:w-[3.5rem] rounded-[8px] shadow-customShadow'
         />
         <h4 className='pl-2'>{playlistName}</h4>
-        <input type='checkbox' id={playlistIds} checked={cheakBox} onChange={handleSwitch} className='hidden' />
+        <input
+          type='checkbox'
+          id={playlistIds}
+          checked={cheakBox}
+          onChange={handleSwitch}
+          className='hidden'
+        />
       </label>
     </>
   );
 };
 
 export default FilterBlend;
-
-// const [holderColorBlend, setHolderColorBlend] = useState("");
-// const [holderColorFilter, setHolderColorFilter] = useState("");
-// useEffect(() => {
-//   let getColor = () => Colors[Math.floor(Math.random() * Colors.length)];
-//   setHolderColorBlend(getColor());
-//   setHolderColorFilter(getColor());
-// }, [userPlaylist]);
-// const Colors = [
-//   `rgb(192,255,69)`,
-//   `rgb(152,63,244)`,
-//   `rgb(246,60,202)`,
-//   `rgb(189,35,97)`,
-//   `rgb(233,128,26)`,
-//   `rgb(248,218,5)`,
-//   `rgb(110,30,110)`,
-// ];

@@ -10,11 +10,14 @@ const TopSongs = () => {
   useEffect(() => {
     const Tracks = async () => {
       try {
-        const response = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=${range}_term&limit=40`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `https://api.spotify.com/v1/me/top/tracks?time_range=${range}_term&limit=40`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         const res = response.data.items;
         setData(res);
       } catch (e) {}
@@ -51,7 +54,9 @@ const TopSongs = () => {
         className={`flex flex-col sm:m-1.5 m-1 bg-orange-600 overflow-auto w-[58%] overflow-x-hidden rounded-[15px] border-[3px] sm:border-[5px] border-[rgba(0,0,0,0.1)] `}>
         <audio ref={audioRef} src={song}></audio>
         {data.map((items) => {
-          let imgUrl = items.album.images.find((item) => item.height === 64).url;
+          let imgUrl = items.album.images.find(
+            (item) => item.height === 64
+          ).url;
           let Name = items.name.split(`-`)[0];
           let Artist = items.artists.map((artist) => artist.name)?.join(', ');
           let PreviewUrl = items.preview_url;
@@ -77,13 +82,23 @@ const TopSongs = () => {
   );
 };
 
-const SongLayer = ({ imgUrl, Name, Artist, PreviewUrl, handlePreviewSong, song, playing }) => {
+const SongLayer = ({
+  imgUrl,
+  Name,
+  Artist,
+  PreviewUrl,
+  handlePreviewSong,
+  song,
+  playing,
+}) => {
   return (
     <>
       <article
         onClick={handlePreviewSong}
         className={`p-1 pt-1.5 pb-2 flex rounded-[10px] hover:text-black transition duration-150 ease-in cursor-pointer  ${
-          song === PreviewUrl && playing ? `bg-[rgba(0,0,0,0.2)] text-black scale-95` : ``
+          song === PreviewUrl && playing
+            ? `bg-[rgba(0,0,0,0.2)] text-black scale-95`
+            : ``
         } ${PreviewUrl ? `brightness-100` : `bg-[rgba(0,0,0,0)]`}`}>
         <img
           src={imgUrl}
