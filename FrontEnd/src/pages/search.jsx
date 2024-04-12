@@ -21,7 +21,7 @@ const DeepSearch = () => {
     const SearchedSongs = async () => {
       try {
         const data = await axios.get(
-          'https://api.spotify.com/v1/search?q=remaster%2520track%3ADoxy%2520artist%3AMiles%2520Davis&type=track',
+          'https://api.spotify.com/v1/search?q=remaster%2520artist%3AMiles%2520Davis&type=track',
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -46,32 +46,33 @@ const DeepSearch = () => {
           </button>
         </Link>
       </header>
-      <div className=' w-[90%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[40%] flex justify-center flex-row h-[55%] md:h-[60%]'>
-        <div className='flex  items-start w-[100%]'>
-          <input
-            onChange={handleInput}
-            onClick={handleSubmit}
-            type='text'
-            className='w-[80%] rounded-[10px] text-zinc-900 pl-2 pr-2 border-[3px] border-customLightGray'
-          />
-        </div>
+      <div className=' w-[100%] flex justify-center flex-row h-[3%] md:h-[3.5%] mb-5'>
+        <input
+          onChange={handleInput}
+          onClick={handleSubmit}
+          type='text'
+          className='w-[75%] sm:w-[70%] md:w-[65%] lg:w-[60%] xl:w-[45%] h-[100%] rounded-[8px] text-zinc-900 px-2 border-[2px] border-customLightGray'
+        />
       </div>
-      <div>
-        {searched.map((songs) => {
-          let imageUrl = songs.album.images.find((img) => img.height == 64).url;
-          let name = songs.name.split(`-`)[0];
-          let preview = songs?.preview;
-          let artist = songs.artists.map((artist) => artist.name)?.join(`, `);
-          return (
-            <>
+      <div className='w-[90%] h-[65%] my-3 px-5 overflow-y-auto overflow-x-hidden rounded-[12px] bg-gray-700'>
+        {/* <div> */}
+        {searched &&
+          searched.map((songs) => {
+            let imageUrl = songs.album.images.find(
+              (img) => img.height == 64
+            ).url;
+            let name = songs.name.split(`-`)[0];
+            let preview = songs?.preview;
+            let artist = songs.artists.map((artist) => artist.name)?.join(`, `);
+            return (
               <Tracks
+                key={songs.id}
                 imageUrl={imageUrl}
                 name={name}
                 preview={preview}
                 artist={artist}></Tracks>
-            </>
-          );
-        })}
+            );
+          })}
       </div>
     </>
   );
