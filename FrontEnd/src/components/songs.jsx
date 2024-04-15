@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import axios from 'axios';
+import { motion } from 'framer-motion';
+import { FRAMER_FADE, FRAMER_FADE_INOUT } from '../util/framer';
 import { TokenContext, TimeRangeContext } from '../context/Context';
 
 const TopSongs = () => {
@@ -50,7 +52,8 @@ const TopSongs = () => {
 
   return (
     <>
-      <section
+      <motion.section
+        {...FRAMER_FADE_INOUT}
         className={`flex flex-col sm:m-1.5 m-1 bg-orange-600 overflow-auto w-[58%] overflow-x-hidden rounded-[15px] border-[3px] sm:border-[5px] border-[rgba(0,0,0,0.1)] `}>
         <audio ref={audioRef} src={song}></audio>
         {data.map((items) => {
@@ -77,7 +80,7 @@ const TopSongs = () => {
             />
           );
         })}
-      </section>
+      </motion.section>
     </>
   );
 };
@@ -93,7 +96,8 @@ const SongLayer = ({
 }) => {
   return (
     <>
-      <article
+      <motion.article
+        {...FRAMER_FADE}
         onClick={handlePreviewSong}
         className={`p-1 pt-1.5 pb-2 flex rounded-[10px] hover:text-black transition duration-150 ease-in cursor-pointer  ${
           song === PreviewUrl && playing
@@ -110,7 +114,7 @@ const SongLayer = ({
           <div className='text-[10px] sm:text-base'>{Name}</div>
           <div className='font-thin hidden text-sm sm:block'>{Artist}</div>
         </div>
-      </article>
+      </motion.article>
     </>
   );
 };
