@@ -30,8 +30,7 @@ const TopArtist = () => {
 
   return (
     <>
-      <motion.section
-        {...FRAMER_FADE_INOUT}
+      <section
         className={`flex flex-col sm:m-1.5 m-1 bg-green-600 overflow-auto w-[42%] rounded-[15px] overflow-x-hidden border-[3px] sm:border-[5px] border-[rgba(0,0,0,0.1)] `}>
         {data.map((items) => {
           let key = items.id;
@@ -52,7 +51,7 @@ const TopArtist = () => {
             />
           );
         })}
-      </motion.section>
+      </section>
     </>
   );
 };

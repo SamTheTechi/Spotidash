@@ -52,8 +52,7 @@ const TopSongs = () => {
 
   return (
     <>
-      <motion.section
-        {...FRAMER_FADE_INOUT}
+      <section
         className={`flex flex-col sm:m-1.5 m-1 bg-orange-600 overflow-auto w-[58%] overflow-x-hidden rounded-[15px] border-[3px] sm:border-[5px] border-[rgba(0,0,0,0.1)] `}>
         <audio ref={audioRef} src={song}></audio>
         {data.map((items) => {
@@ -80,7 +79,7 @@ const TopSongs = () => {
             />
           );
         })}
-      </motion.section>
+      </section>
     </>
   );
 };
