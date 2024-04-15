@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { TimeRangeContext } from '../context/Context';
+import { FRAMER_FADE_RIGHT } from '../util/framer';
 import { motion } from 'framer-motion';
-import { FRAMER_FADE_INOUT } from '../util/framer';
 
-const Player = () => {
+const Ranger = () => {
   const { setRange, range } = useContext(TimeRangeContext);
 
   const ChangeRange = (e) => {
@@ -29,7 +29,7 @@ const Player = () => {
 
   return (
     <motion.section
-      {...FRAMER_FADE_INOUT}
+      {...FRAMER_FADE_RIGHT}
       className={`flex flex-row sm:m-1.5 m-1 box-content bg-purple-700 h-[14%] overflow-auto overflow-x-hidden rounded-[15px] border-[3px] font-medium text-[12px] sm:text-base sm:border-[5px] border-[rgba(0,0,0,0.1)] justify-evenly items-center`}>
       <Button value='short' display_name='Past 4 <br /> Weeks' />
       <Button value='medium' display_name='Past 6 <br /> Months' />
@@ -38,4 +38,4 @@ const Player = () => {
   );
 };
 
-export default Player;
+export default Ranger;

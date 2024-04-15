@@ -2,6 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { TokenContext, PlaylistContext } from '../context/Context';
+import { motion } from 'framer-motion';
+import {
+  FRAMER_FADE,
+  FRAMER_FADE_INOUT,
+  FRAMER_FADE_OUT,
+} from '../util/framer';
 
 const DeepSearch = () => {
   const { token } = useContext(TokenContext);
@@ -42,15 +48,19 @@ const DeepSearch = () => {
           </button>
         </Link>
       </header>
-      <section className=' w-[100%] flex justify-center flex-row h-[3%] md:h-[3.5%] mb-5'>
+      <motion.section
+        {...FRAMER_FADE_OUT}
+        className=' w-[100%] flex justify-center flex-row h-[3.5%] md:h-[4%] mb-5'>
         <input
           placeholder='Search for songs....'
           onChange={handleInput}
           type='text'
-          className='w-[75%] sm:w-[70%] md:w-[65%] lg:w-[60%] xl:w-[45%] h-[100%] rounded-[8px] text-zinc-900 px-2 border-[2px] border-customLightGray'
+          className='w-[75%] sm:w-[70%] md:w-[65%] lg:w-[60%] xl:w-[45%] h-[100%] rounded-[6px] text-zinc-900 px-2 border-[2px] border-customLightGray'
         />
-      </section>
-      <section className='w-[90%] h-[65%] my-3 p-5 overflow-y-auto overflow-x-hidden rounded-[12px] bg-gray-700'>
+      </motion.section>
+      <motion.section
+        {...FRAMER_FADE_INOUT}
+        className='w-[90%] h-[65%] my-3 p-5 overflow-y-auto overflow-x-hidden rounded-[12px] bg-gray-700'>
         {searched &&
           searched.map((songs) => {
             let imageUrl = songs.album.images.find(
@@ -67,7 +77,7 @@ const DeepSearch = () => {
                 artist={artist}></Tracks>
             );
           })}
-      </section>
+      </motion.section>
     </>
   );
 };
@@ -77,7 +87,7 @@ export default DeepSearch;
 const Tracks = ({ imageUrl, name, artist, preview }) => {
   return (
     <>
-      <article className={`flex py-2`}>
+      <motion.article {...FRAMER_FADE} className={`flex py-2`}>
         <img
           src={`${imageUrl}`}
           alt={name}
@@ -87,7 +97,7 @@ const Tracks = ({ imageUrl, name, artist, preview }) => {
           <span className='text-base font-semibold sm:text-lg'>{name}</span>
           <span className='font-thin sm:text-base text-sm'>{artist}</span>
         </div>
-      </article>
+      </motion.article>
     </>
   );
 };
