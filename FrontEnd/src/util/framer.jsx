@@ -10,7 +10,7 @@ export const FRAMER_FADE = {
 export const FRAMER_FADE_INOUT = {
   initial: {
     opacity: 0,
-    y: 80,
+    y: 60,
   },
   animate: {
     opacity: 1,
@@ -18,13 +18,14 @@ export const FRAMER_FADE_INOUT = {
   },
   transition: {
     duration: 0.6,
+    delay: 0.25,
   },
 };
 
 export const FRAMER_FADE_OUT = {
   initial: {
     opacity: 0,
-    y: -80,
+    y: -60,
   },
   animate: {
     opacity: 1,
@@ -32,13 +33,14 @@ export const FRAMER_FADE_OUT = {
   },
   transition: {
     duration: 0.6,
+    delay: 0.25,
   },
 };
 
 export const FRAMER_FADE_LEFT = {
   initial: {
     opacity: 0,
-    x: -80,
+    x: -60,
   },
   animate: {
     opacity: 1,
@@ -46,13 +48,14 @@ export const FRAMER_FADE_LEFT = {
   },
   transition: {
     duration: 0.6,
+    delay: 0.25,
   },
 };
 
 export const FRAMER_FADE_RIGHT = {
   initial: {
     opacity: 0,
-    x: 80,
+    x: 60,
   },
   animate: {
     opacity: 1,
@@ -60,5 +63,6 @@ export const FRAMER_FADE_RIGHT = {
   },
   transition: {
     duration: 0.6,
+    delay: 0.25,
   },
 };
