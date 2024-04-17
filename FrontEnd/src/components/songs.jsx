@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { FRAMER_FADE, FRAMER_FADE_INOUT } from '../util/framer';
+import { FRAMER_FADE } from '../util/framer';
 import { TokenContext, TimeRangeContext } from '../context/Context';
 
 const TopSongs = () => {
   const { range } = useContext(TimeRangeContext);
   const { token } = useContext(TokenContext);
   const [data, setData] = useState([]);
+  const [song, setSong] = useState(null);
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     const Tracks = async () => {
@@ -22,15 +25,13 @@ const TopSongs = () => {
         );
         const res = response.data.items;
         setData(res);
-      } catch (e) {}
+      } catch (e) {
+        throw e;
+      }
     };
     Tracks();
     audioRef.current.volume = 0.4;
   }, [token, range]);
-
-  const [song, setSong] = useState(null);
-  const [playing, setPlaying] = useState(false);
-  const audioRef = useRef(null);
 
   useEffect(() => {
     if (playing && song) {
